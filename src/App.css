@@ -4,9 +4,9 @@
   user-select: none; /* Standard syntax */
 }
 
-body{
+body {
   margin: 0px;
-  font-family: 'Roboto', sans-serif;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
   color: white;
 }
 

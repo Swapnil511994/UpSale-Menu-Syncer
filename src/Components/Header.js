@@ -15,7 +15,7 @@ export default function Header(props)
     return (
         <div className="header">
             <h2>Select Store</h2>
-            <SelectSearch search={true} options={options} value={props.selectedStore.id}
+            <SelectSearch search={true} options={options} value={props.selectedStore.id} id="storeSelector"
             placeholder="Choose Store" onChange={(value)=>props.handleStoreChange(value)} />
         </div>
     );
