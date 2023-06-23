@@ -1,0 +1,92 @@
+*{
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+body{
+  margin: 0px;
+  font-family: 'Roboto', sans-serif;
+  color: white;
+}
+
+/* Scroll bar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+.container
+{
+  background: radial-gradient(#636669, #252627);
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100%;
+}
+
+/* Header Styles */
+.header
+{
+  border-bottom: 1px dashed white;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  align-items: center;
+}
+
+.header > h2
+{
+  margin-right: 20px;
+}
+
+.select-search-container
+{
+  width: 100%;
+}
+/* End Of Header Styles */
+
+
+/* Body Styles */
+.bodyContainer
+{
+  display: flex;
+  flex-direction: column;
+}
+.toolbar__container
+{
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px dashed white;
+}
+
+.bodyToolbar
+{
+  display: flex;
+  flex-direction: row;
+}
+
+.toolbar__button
+{
+  margin: 2.5px;
+  padding: 5px;
+  color: white;
+  background-color: transparent;
+  font-size: 18px;
+  border-radius: 5px;
+}
+/* End of Body Styles */
+
+
