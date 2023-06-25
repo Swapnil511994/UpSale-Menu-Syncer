@@ -90,3 +90,20 @@ body {
 /* End of Body Styles */
 
 
+/* Item Styles */
+table, td, th {  
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tax__table {
+  width: 100%;
+}
+/* End Of Item Styles */
+
+

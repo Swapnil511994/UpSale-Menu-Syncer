@@ -1,5 +1,7 @@
-import axios from 'axios';
 import React from 'react';
+import loadStoreMenu from "../Utils/apiCalls";
+
+import Items from './Items';
 
 export default function Body(props)
 {
@@ -8,104 +10,104 @@ export default function Body(props)
     const [data,setData] = React.useState({});
     const [displayTable, setDisplayTable] = React.useState();
 
-    function showMenuBuilder()
+    function displayProducts()
     {
-        console.log(data);
-        let display = null;
-        let products = data.products;
+        // console.log(data);
         let categories = data.categories;
         let subcategories = data.subcategories;
+        let products = data.products;
         let menus = data.menutypes;
         let associations = data.associations;
+        let options = data.options;
+        let optionvalues = data.options_values;
 
-        let productsDisplay = null;
-        for (let i = 0; i < products.length; i++) {
+        //products to process
+        let prods = [];
+        for (let i = 0; i < products.length; i++) 
+        {
+            let prod_item = {};
             const product = products[i];
-            const association = associations.filter((assoc)=>{
-                return assoc.item == product.id;
-            });
+            prod_item = {...product};
 
-            product.subCats = [];
-            product.cats = [];
-            for (let i = 0; i < association.length; i++) {
-                const assoc = association[i];
-                if(assoc.subcategory)
-                {
-                    for(let j=0;j<subcategories.length;j++)
+            //associations, subcategories and categories
+            prod_item.assoc = associations.filter((assoc)=>{
+                return assoc.item === product.id;
+            });
+            if(prod_item.assoc.length>0)
+            {
+                for (let j = 0; j < prod_item.assoc.length; j++) {
+                    let assoc = prod_item.assoc[j];
+                    if(assoc.subcategory)
                     {
-                        if(subcategories[j].id == assoc.subcategory)
+                        for(let k=0;k<subcategories.length;k++)
                         {
-                            product.subCats.push(subcategories[j]);
+                            if(subcategories[k].id==assoc.subcategory)
+                            {
+                                assoc.subcategoryObj = subcategories[k];
+                                break;
+                            }
+                        }
+                    }
+                    if(assoc.category)
+                    {
+                        for(let k=0;k<categories.length;k++)
+                        {
+                            if(categories[k].id==assoc.category)
+                            {
+                                assoc.categoryObj = categories[k];
+                                if(assoc.categoryObj.menu_id && assoc.categoryObj.menu_id>0)
+                                {
+                                    for(let l=0;l<menus.length;l++)
+                                    {
+                                        if(menus[l].id == assoc.categoryObj.menu_id)
+                                        {
+                                            assoc.categoryObj.menuObj = menus[l];
+                                            break;
+                                        }
+                                    }
+                                }
+                                break;
+                            }
                         }
                     }
                 }
-
-                if(assoc.category)
-                {
-                    for (let j = 0; j < categories.length; j++) 
-                    {
-                        if(categories[j].id == assoc.category)
-                        {
-                            product.cats.push(categories[j]);
-                        }
-                    }
-                }   
             }
+
+            //options and options_values
+            prod_item.options = options.filter((option)=>{
+                return option.item === product.id;
+            });
+            if(prod_item.options && prod_item.options.length>0)
+            {
+                //optionvalues
+                for(let j=0;j<prod_item.options.length;j++)
+                {
+                    let option = prod_item.options[j];
+                    option.values = optionvalues.filter((optionvalue)=>{
+                        return option.id === optionvalue.option_id;
+                    });
+                }
+            }
+
+            prods.push(prod_item);
         }
-
-        
-
-        console.log(products);
-
-        display=
-        <table>
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Title</th>
-                    <th>Pos Item Id</th>
-                    <th>Categories</th>
-                    <th>Price</th>
-                    <th>Tax</th>
-                </tr>    
-            </thead>   
-            <tbody>
-                {productsDisplay}
-            </tbody>
-            
-        </table>;
-
-        return display;
+        let displayStr = null;
+        displayStr = <><h1>All Products</h1><Items items={prods} /></>;
+        setDisplayTable(displayStr);
     }
-
-    function showMenuHandler()
+    async function showMenuHandler()
     {
         //call api to display all the data
-        let data = JSON.stringify({
-            store: selectedStore
-        });
-
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'https://api.wcom.shop/api/getStoreData',
-            headers: { 
-                'Content-Type': 'application/json'
-            },
-            data : data
-        };
-
-        axios.request(config).then((response) => {
-            setData(response.data.data);
-            const displayStr = showMenuBuilder();
-            setDisplayTable(displayStr);
-        })
-        .catch((error) => 
+        let data = await loadStoreMenu(selectedStore.id);
+        if(data)
         {
-            console.log(error);
-        });
-
-        
+            setData(data);
+            displayProducts(); 
+        }
+        else
+        {
+            alert("Unable To Load Data");
+        }
     }
     
     return(
