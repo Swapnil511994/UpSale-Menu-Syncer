@@ -1,7 +1,7 @@
 import 'react-data-grid/lib/styles.css';
 import DataGrid from 'react-data-grid';
 
-export default function(props)
+export default function Taxes(props)
 {
     let taxes = props.tax_data;
     // console.log(taxes);

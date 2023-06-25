@@ -41,7 +41,7 @@ export default function Body(props)
                     {
                         for(let k=0;k<subcategories.length;k++)
                         {
-                            if(subcategories[k].id==assoc.subcategory)
+                            if(subcategories[k].id===assoc.subcategory)
                             {
                                 assoc.subcategoryObj = subcategories[k];
                                 break;
@@ -52,14 +52,14 @@ export default function Body(props)
                     {
                         for(let k=0;k<categories.length;k++)
                         {
-                            if(categories[k].id==assoc.category)
+                            if(categories[k].id===assoc.category)
                             {
                                 assoc.categoryObj = categories[k];
                                 if(assoc.categoryObj.menu_id && assoc.categoryObj.menu_id>0)
                                 {
                                     for(let l=0;l<menus.length;l++)
                                     {
-                                        if(menus[l].id == assoc.categoryObj.menu_id)
+                                        if(menus[l].id === assoc.categoryObj.menu_id)
                                         {
                                             assoc.categoryObj.menuObj = menus[l];
                                             break;
