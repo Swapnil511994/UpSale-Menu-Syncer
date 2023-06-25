@@ -98,16 +98,20 @@ export default function Body(props)
     async function showMenuHandler()
     {
         //call api to display all the data
-        let data = await loadStoreMenu(selectedStore.id);
-        if(data)
-        {
+        await loadStoreMenu(selectedStore).then((data)=>{
             setData(data);
-            displayProducts(); 
-        }
-        else
-        {
-            alert("Unable To Load Data");
-        }
+            displayProducts();
+        });
+        // let data = await loadStoreMenu(selectedStore.id);
+        // if(data)
+        // {
+        //     setData(data);
+        //     displayProducts(); 
+        // }
+        // else
+        // {
+        //     alert("Unable To Load Data");
+        // }
     }
     
     return(
