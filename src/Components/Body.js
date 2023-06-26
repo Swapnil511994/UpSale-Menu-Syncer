@@ -94,6 +94,7 @@ export default function Body(props)
         let displayStr = null;
         displayStr = <Items items={prods} />;
         setDisplayTable(displayStr);
+        
     }
     async function showMenuHandler()
     {

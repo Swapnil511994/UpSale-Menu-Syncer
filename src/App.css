@@ -101,6 +101,11 @@ body {
   block-size: 100%;
   /* display: flex; */
 }
+
+.base-fill-grid
+{
+  block-size: 80%;
+}
 /* End of Body Styles */
 
 
