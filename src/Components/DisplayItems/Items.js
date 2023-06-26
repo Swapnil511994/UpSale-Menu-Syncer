@@ -61,13 +61,12 @@ export default function Items(props)
         <div className="cell-content">{cell.value}</div>
     );
 
-    return 
-        <DataGrid 
+    return <DataGrid 
             columns={columns} 
             rows={rows} 
             rowHeight={rowHeight}
             rowKeyGetter={(row) => row.id}
             defaultCellRenderer={cellRenderer}
             className='fill-grid'
-        />;
+            />;
 }
