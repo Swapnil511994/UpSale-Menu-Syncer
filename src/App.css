@@ -87,6 +87,20 @@ body {
   font-size: 18px;
   border-radius: 5px;
 }
+
+.table__container
+{
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  block-size: 100vh;
+  overflow: hidden;
+}
+.fill-grid
+{
+  block-size: 100%;
+  /* display: flex; */
+}
 /* End of Body Styles */
 
 
@@ -104,6 +118,13 @@ table {
 .tax__table {
   width: 100%;
 }
+
+.cell-content {
+  display: flex;
+  align-items: flex-start; /* Align text at the top */
+  height: 100%;
+}
+
 /* End Of Item Styles */
 
 

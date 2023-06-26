@@ -1,6 +1,5 @@
 import 'react-data-grid/lib/styles.css';
 import DataGrid from "react-data-grid";
-import SelectColumn from 'react-data-grid';
 
 import OptionValues from "./OptionValues";
 import React from 'react';
@@ -14,11 +13,11 @@ export default function Options(props)
     }
 
     const columns = [
-        { key: 'id', name: 'ID', resizable: true },
-        { key: 'title', name: 'Title', resizable: true },
-        { key: 'type', name: 'Type', resizable: true },
-        { key: 'pos_option_id', name: 'POS Option ID', resizable: true },
-        { key: "values", name:"Option Items", resizable: true }
+        { key: 'id', name: 'ID', resizable: true, width:80 },
+        { key: 'title', name: 'Title', resizable: true, width:150 },
+        { key: 'type', name: 'Type', resizable: true, width:80 },
+        { key: 'pos_option_id', name: 'POS Option ID', resizable: true, width:80 },
+        { key: "values", name:"Option Items", resizable: true, width:350 }
     ];
 
     const rows = optionsObjs.map((option)=>{
@@ -30,7 +29,7 @@ export default function Options(props)
 
     function calculateRowHeight(params)
     {
-        if(params.type == "ROW")
+        if(params.type === "ROW")
         {
             let id = params.row.id;
             for (let i = 0; i < optionsObjs.length; i++) {
@@ -43,5 +42,5 @@ export default function Options(props)
         return 30;
     }
 
-    return <DataGrid columns={columns} rows={rows} rowHeight={calculateRowHeight} />;
+    return <DataGrid columns={columns} rows={rows} rowHeight={calculateRowHeight} className='fill-grid' />;
 }

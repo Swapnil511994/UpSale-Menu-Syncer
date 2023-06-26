@@ -21,7 +21,7 @@ export default function CategoriesAndSubCategories(params)
             let catSubObj = {}; 
             catSubObj.id = assoc.categoryObj.id;
             catSubObj.title = (assoc.subcategoryObj)? `${assoc.subcategoryObj.title} (${assoc.categoryObj.title})`:assoc.categoryObj.title;
-            catSubObj.menu = (assoc.categoryObj.menuObj)? `${assoc.categoryObj.menuObj.title}`: null;
+            catSubObj.menu = (assoc.categoryObj.menuObj)? `${assoc.categoryObj.menuObj.title}`: `Base`;
             catSubObj.pos_category_id = assoc.categoryObj.pos_category_id;
             rows.push(catSubObj);
         }

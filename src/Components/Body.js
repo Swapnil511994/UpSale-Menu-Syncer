@@ -1,16 +1,16 @@
 import React from 'react';
 import loadStoreMenu from "../Utils/apiCalls";
 
-import Items from './Items';
+import Items from './DisplayItems/Items';
 
 export default function Body(props)
 {
     const selectedStore = props.selectedStore;
 
-    const [data,setData] = React.useState({});
+    // const [data,setData] = React.useState({});
     const [displayTable, setDisplayTable] = React.useState();
 
-    function displayProducts()
+    function displayProducts(data)
     {
         // console.log(data);
         let categories = data.categories;
@@ -92,26 +92,27 @@ export default function Body(props)
             prods.push(prod_item);
         }
         let displayStr = null;
-        displayStr = <><h1>All Products</h1><Items items={prods} /></>;
+        displayStr = <Items items={prods} />;
         setDisplayTable(displayStr);
     }
     async function showMenuHandler()
     {
         //call api to display all the data
-        await loadStoreMenu(selectedStore).then((data)=>{
-            setData(data);
-            displayProducts();
-        });
-        // let data = await loadStoreMenu(selectedStore.id);
-        // if(data)
-        // {
-        //     setData(data);
-        //     displayProducts(); 
-        // }
-        // else
-        // {
-        //     alert("Unable To Load Data");
-        // }
+        // await loadStoreMenu(selectedStore).then((data)=>{
+        //     displayProducts(data);
+        // }).catch((err)=>{
+        //     alert("Unable To Load Menu");
+        // });
+        let data = await loadStoreMenu(selectedStore.id);
+        if(data)
+        {
+            // setData(data);
+            displayProducts(data); 
+        }
+        else
+        {
+            alert("Unable To Load Data");
+        }
     }
     
     return(

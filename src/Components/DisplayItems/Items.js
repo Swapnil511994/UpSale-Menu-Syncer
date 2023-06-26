@@ -8,16 +8,16 @@ import Options from './Options';
 export default function Items(props)
 {
     let items = props.items;
-    console.log(items);
+    // console.log(items);
     
     const columns = [
-        { key: 'id', name: 'Id', frozen:true, resizable: true, sortable: true },
-        { key: 'title', name: 'Title', frozen:true, resizable: true, sortable: true },
-        { key: "pos_item_id", name:"Pos Id", resizable: true, sortable: true },
-        { key: "price", name: "Price", resizable: true, sortable: true },
-        { key: "assoc", name: "Categories/ SubCategories", resizable: true, sortable: true },
-        { key: "options", name: "Options", resizable: true, sortable: true },
-        { key: "tax_data", name: "Taxes", resizable: true, sortable: true },
+        { key: 'id', name: 'Id', frozen:true, resizable: true, sortable: true, width:100 },
+        { key: 'title', name: 'Title', frozen:true, resizable: true, sortable: true, width:200 },
+        { key: "pos_item_id", name:"Pos Id", resizable: true, sortable: true, width:100 },
+        { key: "price", name: "Price", frozen:true, resizable: true, sortable: true, width:50 },
+        { key: "assoc", name: "Categories/ SubCategories", resizable: true, sortable: false, width: 400 },
+        { key: "options", name: "Options", resizable: true, sortable: false, width:700 },
+        { key: "tax_data", name: "Taxes", resizable: true, sortable: false, width:300 },
     ];
         
     const rows = items.map((product)=>{
@@ -27,7 +27,6 @@ export default function Items(props)
                 options: <Options optionsObjs={product.options} />
             };
     });
-
     
     function getOptionValuesCount(item)
     {
@@ -38,7 +37,7 @@ export default function Items(props)
                 return acc;
             },0);
             // console.log(sum);
-            return sum + item.options.length*2+1;
+            return sum + item.options.length*2;
         }
         return 0;
     }
@@ -58,5 +57,16 @@ export default function Items(props)
         return 30;
     }
 
-    return <DataGrid columns={columns} rows={rows} rowHeight={rowHeight} />;
+    const cellRenderer = ({ cell }) => (
+        <div className="cell-content">{cell.value}</div>
+    );
+
+    return <DataGrid 
+            columns={columns} 
+            rows={rows} 
+            rowHeight={rowHeight}
+            rowKeyGetter={(row) => row.id}
+            defaultCellRenderer={cellRenderer}
+            className='fill-grid'
+            />;
 }
