@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function DisplayNewItems(props)
+export default function DeletedItems(props)
 {
     let items = props.items;
     const [allSelected, setAllSelected] = React.useState(true);

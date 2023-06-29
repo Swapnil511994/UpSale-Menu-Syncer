@@ -4,6 +4,7 @@ import apiCalls from "../Utils/apiCalls";
 import Items from './DisplayItems/Items';
 import DisplayNewItems from './DisplayItems/NewItems';
 import DisplayDeletedItems from "./DisplayItems/DeletedItems";
+import DisplayUpdatedItems from "./DisplayItems/UpdatedItems";
 
 export default function Body(props)
 {
@@ -310,6 +311,14 @@ export default function Body(props)
                         checkAll={checkUncheckDeletedItems} 
                         checkOne={checkUncheckDeletedItem}
                     /> : <h2>No Items For Deletion</h2>
+                }
+
+                <br />
+                <br />
+                <h1>Updated Items</h1>
+                {
+                    updatedItems.length>0?
+                    <DisplayUpdatedItems items={updatedItems} />: <h2>No Items For Update</h2>
                 }
             </div>
             </div>

@@ -1,42 +1,18 @@
 import React from "react";
 
-export default function NewItems(props)
+export default function UpdatedItems(props)
 {
     let items = props.items;
-    const [allSelected, setAllSelected] = React.useState(true);
-
-    function handleOnChange(pos_item_id,val)
-    {
-        props.checkOne(pos_item_id, !val);
-    }
-
-    function handleCheckUncheckAllNewItems(event)
-    {
-        setAllSelected((oldVal)=>
-        {
-            return !oldVal;
-        });
-        props.checkAll(allSelected);
-    }
-
-    // for(let i=0;i<items.length;i++)
-    // {
-    //     console.log(`${items[i].title}: ${items[i].isNewItem}`);
-    // }
+    console.log(JSON.stringify(items));
     
     let rows = items.map((item,index)=>
     {
         return (
         <tr>
-            <td>
-                <input type='checkbox'
-                    key={`newItemsCheckbox${index}`} 
-                    checked={item.isNewItem} 
-                    onChange={()=>handleOnChange(item.pos_item_id,item.isNewItem)} 
-                />
-            </td>
             <td>{item.title}</td>
+            <td>{item.updatedTitle}</td>
             <td>{item.price}</td>
+            <td>{item.updatedPrice}</td>
             <td>{item.pos_item_id}</td>
             <td>
                 {
@@ -51,6 +27,29 @@ export default function NewItems(props)
                         </thead>
                         <tbody>
                             {item.tax_data.map((tax)=>{
+                                return <tr>
+                                    <td>{tax.title}</td>
+                                    <td>{tax.value}</td>
+                                    <td>{tax.type}</td>
+                                </tr>;
+                            })}
+                        </tbody>
+                    </table>
+                }
+            </td>
+            <td>
+                {
+                    item.updatedTax.length>0 && 
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Value</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {item.updatedTax.map((tax)=>{
                                 return <tr>
                                     <td>{tax.title}</td>
                                     <td>{tax.value}</td>
@@ -129,6 +128,53 @@ export default function NewItems(props)
                     </table>
                 }
             </td>
+            <td>
+                {
+                    item.updatedOptions.length>0 &&
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parent Option Name</th>
+                                <th>Option Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                item.updatedOptions.map((option)=>{
+                                    return <>
+                                    <tr>
+                                        <td>{option.title}</td>
+                                        <td>{option.type}</td>
+                                    </tr>
+                                    {option.values && option.values.length>0 &&
+                                        <tr>
+                                            <td colSpan={2}>
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Option Name</th>
+                                                            <th>Price</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {option.values.map((optionsItem)=>{
+                                                            return <tr>
+                                                                <td>{optionsItem.title}</td>
+                                                                <td>{optionsItem.price}</td>
+                                                            </tr>;
+                                                        })}
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    }
+                                    </>;
+                                })
+                            }
+                        </tbody>
+                    </table>
+                }
+            </td>
         </tr>
         );
     });
@@ -136,20 +182,16 @@ export default function NewItems(props)
     let table = <table>
         <thead>
             <tr>
-                <th>
-                    <input 
-                        type='checkbox' 
-                        key="checkAllNewItems" 
-                        checked={allSelected} 
-                        onChange={handleCheckUncheckAllNewItems} 
-                    />
-                </th>
                 <th>Title</th>
+                <th>Updated Title</th>
                 <th>Price</th>
+                <th>Updated Price</th>
                 <th>Pos Id</th>
                 <th>Tax</th>
+                <th>Updated Tax</th>
                 <th>Category</th>
                 <th>Options</th>
+                <th>Updated Options</th>
             </tr>
         </thead>
         <tbody>
