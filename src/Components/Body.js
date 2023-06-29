@@ -2,12 +2,62 @@ import React from 'react';
 import apiCalls from "../Utils/apiCalls";
 
 import Items from './DisplayItems/Items';
+import DisplayNewItems from './DisplayItems/NewItems';
+import DisplayDeletedItems from "./DisplayItems/DeletedItems";
 
 export default function Body(props)
 {
     const selectedStore = props.selectedStore;
 
-    const [data,setData] = React.useState({});
+    const [newItems, setNewItems] = React.useState([]);
+    const [updatedItems, setUpdatedItems] = React.useState([]);
+    const [deletedItems, setDeletedItems] = React.useState([]);
+
+    //#region State Manipulation
+        function checkUncheckNewItems(value)
+        {
+            let newItemsArr = newItems.map((item)=>{
+                return{
+                    ...item,
+                    isNewItem: value
+                };
+            }); 
+           
+            setNewItems(newItemsArr);
+        }
+
+        function checkUncheckNewItem(posItemId, val)
+        {
+            setNewItems((oldItems)=>{
+                return oldItems.map((item)=>{
+                    return (item.pos_item_id === posItemId) ? {...item, isNewItem:val}:item;
+                });
+            });
+        }
+
+        function checkUncheckDeletedItems(value)
+        {
+            let deletedItemsArr = deletedItems.map((item)=>{
+                return{
+                    ...item,
+                    toBeDeleted: value
+                };
+            }); 
+           
+            setDeletedItems(deletedItemsArr);
+        }
+
+        function checkUncheckDeletedItem(posItemId, val)
+        {
+            setDeletedItems((oldItems)=>{
+                return oldItems.map((item)=>{
+                    return (item.pos_item_id === posItemId) ? {...item, toBeDeleted:val}:item;
+                });
+            });
+        }
+
+    //#endregion
+
     const [displayTable, setDisplayTable] = React.useState();
     const [processing, setProcessing] = React.useState(false);
 
@@ -112,7 +162,6 @@ export default function Body(props)
             if(data)
             {
                 console.log("Fetch Menu API Called");
-                // setData(data);
                 displayProducts(data); 
             }
             else
@@ -124,7 +173,66 @@ export default function Body(props)
     //#endregion
     
     //#region Load Takeaway Menu
-        
+        function displayTakeawayData(datum)
+        {
+            // datum = null;
+            if(!datum)
+            {
+                setDisplayTable(<h1>Error while loading data</h1>);
+                return;
+            }
+
+            let newItemsArr = [];
+            let updatedItemsArr = [];
+            let deletedItemsArr = [];
+
+            for (let i = 0; i < datum.length; i++) 
+            {
+                let prod = datum[i];
+                if(!prod.pos_item_id)
+                {
+                    continue;
+                }
+
+                if(!prod.updatedPrice && prod.pos_item_id && prod.pos_item_id>0)
+                {
+                    prod.toBeDeleted = true;
+                }
+                else prod.toBeDeleted = false;
+
+                if(prod.price!==prod.updatedPrice || prod.tax_data !== prod.updatedTax)
+                {
+                    prod.isDirty = true;
+                }
+                else prod.isDirty = false;
+
+                if(!prod.id)
+                {
+                    prod.isNewItem = true;
+                }
+                else prod.isNewItem = false;
+                
+                if(prod.isNewItem === true)
+                {
+                    newItemsArr.push(prod);
+                }
+                else if(prod.toBeDeleted === true)
+                {
+                    deletedItemsArr.push(prod);
+                }
+                else if(prod.isDirty === true)
+                {
+                    updatedItemsArr.push(prod);
+                }
+            }
+
+            setNewItems((oldItems)=>{
+                return newItemsArr;
+            });
+            setUpdatedItems(updatedItemsArr);
+            setDeletedItems(deletedItemsArr);
+        }
+
         async function loadTakeawayHandler()
         {
             if(processing)
@@ -137,9 +245,18 @@ export default function Body(props)
             let pickupResponse = await apiCalls.loadTakeawayMenu(selectedStore.id);
             if(pickupResponse)
             {
-                if(pickupResponse.status == true)
+                // console.log(pickupResponse);
+                if(pickupResponse.status === true)
                 {
-                    setData(pickupResponse.data);
+                    console.log("Load Takeaway Menu API Called");
+                    try 
+                    {
+                        displayTakeawayData(pickupResponse.data);    
+                    } 
+                    catch (error) 
+                    {
+                        console.error(error);    
+                    }
                 }
                 else
                 {
@@ -171,6 +288,30 @@ export default function Body(props)
 
             <div className="table__container">
                 {displayTable}
+            </div>
+
+            <div className='table__container'>
+            <div>
+                <h1>New Items</h1>
+                { newItems.length>0?
+                    <DisplayNewItems items={newItems} 
+                        checkAll={checkUncheckNewItems}
+                        checkOne={checkUncheckNewItem} 
+                    /> : <h2>No New Items</h2>
+                }
+
+                <br />
+                <br />
+
+                <h1>Deleted Items</h1>
+                {
+                    deletedItems.length>0?
+                    <DisplayDeletedItems items={deletedItems} 
+                        checkAll={checkUncheckDeletedItems} 
+                        checkOne={checkUncheckDeletedItem}
+                    /> : <h2>No Items For Deletion</h2>
+                }
+            </div>
             </div>
         </div>
     );

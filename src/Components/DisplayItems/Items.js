@@ -8,7 +8,7 @@ import Options from './Options';
 export default function Items(props)
 {
     let items = props.items;
-    // console.log(items);
+    // console.log(JSON.stringify(items));
     
     const columns = [
         { key: 'id', name: 'Id', frozen:true, resizable: true, sortable: true, width:100 },
