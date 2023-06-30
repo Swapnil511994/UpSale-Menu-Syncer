@@ -66,7 +66,7 @@ export default function UpdatedItems(props)
             </td>
             <td>
                 {
-                    item.updatedTax.length>0 && 
+                    item.updatedTax && item.updatedTax.length>0 && 
                     <table>
                         <thead>
                             <tr>

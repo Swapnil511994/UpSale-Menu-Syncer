@@ -212,7 +212,7 @@ export default function Body(props)
                 }
                 else prod.toBeDeleted = false;
 
-                if(prod.price!==prod.updatedPrice || prod.tax_data !== prod.updatedTax)
+                if(prod.price!==prod.updatedPrice || JSON.stringify(prod.tax_data) !== JSON.stringify(prod.updatedTax))
                 {
                     prod.isDirty = true;
                     prod.acceptTitleChange = false;
@@ -309,6 +309,9 @@ export default function Body(props)
                     console.log(items);
                     let savePickupResponse = await apiCalls.saveTakeawayMenu(selectedStore.id, items);
                     console.log(savePickupResponse);
+                    setDeletedItems([]);
+                    setNewItems([]);
+                    setUpdatedItems([]);
                 break;
             
                 default:
