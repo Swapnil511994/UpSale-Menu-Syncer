@@ -19,15 +19,15 @@ export default function DeletedItems(props)
         props.checkAll(allSelected);
     }
 
-    for(let i=0;i<items.length;i++)
-    {
-        console.log(`${items[i].title}: ${items[i].toBeDeleted}`);
-    }
+    // for(let i=0;i<items.length;i++)
+    // {
+    //     console.log(`${items[i].title}: ${items[i].toBeDeleted}`);
+    // }
     
     let rows = items.map((item,index)=>
     {
         return (
-        <tr>
+        <tr key={"deletedItemRow"+index}>
             <td>
                 <input type='checkbox'
                     key={`deletedItemsCheckbox${index}`} 

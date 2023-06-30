@@ -90,6 +90,16 @@ body {
   border-radius: 5px;
 }
 
+.toolbar__button__big
+{
+  margin: 2.5px;
+  padding: 10px;
+  color: white;
+  background-color: transparent;
+  font-size: 26px;
+  border-radius: 5px;
+}
+
 .table__container
 {
   display: flex;

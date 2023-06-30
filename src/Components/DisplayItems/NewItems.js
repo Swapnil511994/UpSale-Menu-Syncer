@@ -27,7 +27,7 @@ export default function NewItems(props)
     let rows = items.map((item,index)=>
     {
         return (
-        <tr>
+        <tr key={"newItemRow"+index}>
             <td>
                 <input type='checkbox'
                     key={`newItemsCheckbox${index}`} 

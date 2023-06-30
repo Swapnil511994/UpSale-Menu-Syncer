@@ -57,10 +57,20 @@ export default function Body(props)
             });
         }
 
+        function changeUpdatedItemProperty(pos_item_id,property,value)
+        {
+            setUpdatedItems((oldItems)=>
+            {
+                return oldItems.map((item)=>{
+                    return (item.pos_item_id == pos_item_id) ? {...item, [property]:value}: item;
+                });
+            });
+        }
     //#endregion
 
     const [displayTable, setDisplayTable] = React.useState();
     const [processing, setProcessing] = React.useState(false);
+    const [mode, setMode] = React.useState("");
 
     //#region Show Menu
         function displayProducts(data)
@@ -157,7 +167,8 @@ export default function Body(props)
                 alert("Please Wait for current operation to complete");
                 return;
             }
-
+            
+            setMode("");
             setProcessing(true);
             let data = await apiCalls.loadStoreMenu(selectedStore.id);
             if(data)
@@ -204,6 +215,10 @@ export default function Body(props)
                 if(prod.price!==prod.updatedPrice || prod.tax_data !== prod.updatedTax)
                 {
                     prod.isDirty = true;
+                    prod.acceptTitleChange = false;
+                    prod.acceptPriceChange = (prod.price!=prod.updatedPrice)? true: false;
+                    prod.acceptTaxChange = true;
+                    prod.acceptOptionChange = true;
                 }
                 else prod.isDirty = false;
 
@@ -241,7 +256,7 @@ export default function Body(props)
                 alert("Please Wait for current operation to complete");
                 return;
             }
-
+            setMode("pickup");
             setProcessing(true);
             let pickupResponse = await apiCalls.loadTakeawayMenu(selectedStore.id);
             if(pickupResponse)
@@ -272,6 +287,34 @@ export default function Body(props)
                 alert("Unable To Load Data");
             }
             setProcessing(false);
+        }
+    //#endregion
+
+    //#region Save Menu
+        async function saveUpdates()
+        {
+            let resp = window.confirm("Are You Sure? This action cannot be undone.");
+            if(!resp) return;
+
+            let items = {};
+            items.newItems = newItems;
+            items.updatedItems = updatedItems;
+            items.deletedItems = deletedItems;
+
+            console.log(mode);
+            // console.log(items);
+
+            switch (mode) {
+                case "pickup":
+                    console.log(items);
+                    let savePickupResponse = await apiCalls.saveTakeawayMenu(selectedStore.id, items);
+                    console.log(savePickupResponse);
+                break;
+            
+                default:
+                    //do nothing
+                break;
+            }
         }
     //#endregion
 
@@ -318,7 +361,18 @@ export default function Body(props)
                 <h1>Updated Items</h1>
                 {
                     updatedItems.length>0?
-                    <DisplayUpdatedItems items={updatedItems} />: <h2>No Items For Update</h2>
+                    <DisplayUpdatedItems 
+                        items={updatedItems} 
+                        handleChange={changeUpdatedItemProperty}
+                    />: <h2>No Items For Update</h2>
+                }
+                
+                <br />
+                <br />
+
+                {
+                    (updatedItems.length>0 || newItems.length>0 || deletedItems.length>0) &&
+                    <button type='button' className='toolbar__button__big' onClick={saveUpdates}>Save Changes</button>
                 }
             </div>
             </div>

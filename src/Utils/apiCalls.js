@@ -53,4 +53,33 @@ async function loadTakeawayMenu(id)
     }
 }
 
-export default {loadStoreMenu,loadTakeawayMenu};
+async function saveTakeawayMenu(id, requestData)
+{
+    let data = JSON.stringify({
+        store: id,
+        items: requestData
+    });
+
+    // console.log(JSON.stringify(data));
+
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://api.wcom.shop/api/petpooja/savePickupMenu',
+        headers: { 
+            'Content-Type': 'application/json'
+        },
+        data : data
+    };
+    try 
+    {
+        const response = await axios.request(config);
+        return response.data;
+    } 
+    catch (error) 
+    {
+        console.log(error);
+        return null;
+    }
+}
+export default {loadStoreMenu,loadTakeawayMenu,saveTakeawayMenu};

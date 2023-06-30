@@ -3,16 +3,43 @@ import React from "react";
 export default function UpdatedItems(props)
 {
     let items = props.items;
-    console.log(JSON.stringify(items));
+    // console.log(JSON.stringify(items));
+
+    //  for(let i=0;i<items.length;i++)
+    // {
+    //     console.log(`${items[i].title}:\n 
+    //             Title Change: ${items[i].acceptTitleChange} \n 
+    //             Tax Change: ${items[i].acceptTaxChange} \n 
+    //             Price Change: ${items[i].acceptPriceChange}
+    //             Options Change: ${items[i].acceptOptionChange} \n \n
+    //         `);
+    // }
+
+    function updateValues(pos_item_id,property,value)
+    {
+        props.handleChange(pos_item_id,property,value);
+    }
     
     let rows = items.map((item,index)=>
     {
         return (
-        <tr>
+        <tr key={"updatedItemRow"+index}>
             <td>{item.title}</td>
             <td>{item.updatedTitle}</td>
+            <td>
+                <input type="checkbox" 
+                    checked={item.acceptTitleChange} 
+                    onChange={(event)=>updateValues(item.pos_item_id,"acceptTitleChange",event.target.checked)}
+                />
+            </td>
             <td>{item.price}</td>
             <td>{item.updatedPrice}</td>
+            <td>
+                <input type="checkbox" 
+                    checked={item.acceptPriceChange} 
+                    onChange={(event)=>updateValues(item.pos_item_id,"acceptPriceChange",event.target.checked)}
+                />
+            </td>
             <td>{item.pos_item_id}</td>
             <td>
                 {
@@ -59,6 +86,12 @@ export default function UpdatedItems(props)
                         </tbody>
                     </table>
                 }
+            </td>
+            <td>
+                <input type="checkbox" 
+                    checked={item.acceptTaxChange} 
+                    onChange={(event)=>updateValues(item.pos_item_id,"acceptTaxChange",event.target.checked)}
+                />
             </td>
             <td>
                 {
@@ -175,6 +208,12 @@ export default function UpdatedItems(props)
                     </table>
                 }
             </td>
+            <td>
+                <input type="checkbox" 
+                    checked={item.acceptOptionChange} 
+                    onChange={(event)=>updateValues(item.pos_item_id,"acceptOptionChange",event.target.checked)}
+                />
+            </td>
         </tr>
         );
     });
@@ -184,14 +223,18 @@ export default function UpdatedItems(props)
             <tr>
                 <th>Title</th>
                 <th>Updated Title</th>
+                <th>Title Change</th>
                 <th>Price</th>
                 <th>Updated Price</th>
+                <th>Price Change</th>
                 <th>Pos Id</th>
                 <th>Tax</th>
                 <th>Updated Tax</th>
+                <th>Tax Change</th>
                 <th>Category</th>
                 <th>Options</th>
                 <th>Updated Options</th>
+                <th>Option Change</th>
             </tr>
         </thead>
         <tbody>
