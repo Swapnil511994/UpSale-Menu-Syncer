@@ -13,6 +13,7 @@ export default function Body(props)
     const [newItems, setNewItems] = React.useState([]);
     const [updatedItems, setUpdatedItems] = React.useState([]);
     const [deletedItems, setDeletedItems] = React.useState([]);
+    const [triggerHistory, setTriggerHistory] = React.useState([]);
 
     //#region State Manipulation
         function checkUncheckNewItems(value)
@@ -170,6 +171,7 @@ export default function Body(props)
             
             setMode("");
             setProcessing(true);
+            setTriggerHistory([]);
             let data = await apiCalls.loadStoreMenu(selectedStore.id);
             if(data)
             {
@@ -258,34 +260,42 @@ export default function Body(props)
             }
             setMode("pickup");
             setProcessing(true);
-            let pickupResponse = await apiCalls.loadTakeawayMenu(selectedStore.id);
-            if(pickupResponse)
-            {
-                // console.log(pickupResponse);
-                if(pickupResponse.status === true)
+            try {
+                setTriggerHistory([]);
+                let pickupResponse = await apiCalls.loadTakeawayMenu(selectedStore.id);
+                if(pickupResponse)
                 {
-                    console.log("Load Takeaway Menu API Called");
-                    try 
+                    // console.log(pickupResponse);
+                    if(pickupResponse.status === true)
                     {
-                        displayTakeawayData(pickupResponse.data);    
-                    } 
-                    catch (error) 
+                        console.log("Load Takeaway Menu API Called");
+                        try 
+                        {
+                            displayTakeawayData(pickupResponse.data);    
+                        } 
+                        catch (error) 
+                        {
+                            console.error(error);    
+                        }
+                    }
+                    else
                     {
-                        console.error(error);    
+                        if(pickupResponse.message)
+                        {
+                            alert(pickupResponse.message);
+                        }
                     }
                 }
                 else
                 {
-                    if(pickupResponse.message)
-                    {
-                        alert(pickupResponse.message);
-                    }
+                    alert("Unable To Load Data");
                 }
-            }
-            else
+            } 
+            catch (error) 
             {
-                alert("Unable To Load Data");
+                console.log(error);    
             }
+            
             setProcessing(false);
         }
     //#endregion
@@ -293,6 +303,11 @@ export default function Body(props)
     //#region Save Menu
         async function saveUpdates()
         {
+            if(processing)
+            {
+                alert("Please Wait for current operation to complete");
+                return;
+            }
             let resp = window.confirm("Are You Sure? This action cannot be undone.");
             if(!resp) return;
 
@@ -303,24 +318,103 @@ export default function Body(props)
 
             console.log(mode);
             // console.log(items);
-
+            setProcessing(true);
             switch (mode) {
                 case "pickup":
-                    console.log(items);
-                    let savePickupResponse = await apiCalls.saveTakeawayMenu(selectedStore.id, items);
-                    console.log(savePickupResponse);
-                    setDeletedItems([]);
-                    setNewItems([]);
-                    setUpdatedItems([]);
+                    try 
+                    {
+                        setTriggerHistory([]);
+                        let savePickupResponse = await apiCalls.saveTakeawayMenu(selectedStore.id, items);    
+                        setDeletedItems([]);
+                        setNewItems([]);
+                        setUpdatedItems([]);
+                    } 
+                    catch (error) {
+                        
+                    }
+                    
                 break;
             
                 default:
                     //do nothing
                 break;
             }
+            setProcessing(false);
         }
     //#endregion
 
+    //#region Load Trigger History
+        async function loadTriggerHistory()
+        {
+            if(processing)
+            {
+                alert("Please Wait for current operation to complete");
+                return;
+            }
+            setProcessing(true);
+            try 
+            {
+                setTriggerHistory([]);
+                let triggerData = await apiCalls.loadTriggerHistory(selectedStore.id);
+                if(triggerData.data && triggerData.data.length >0)
+                {
+                    setTriggerHistory(triggerData.data);
+                }
+            } 
+            catch (error) 
+            {
+                console.log(error);    
+            }
+            setProcessing(false);
+        }
+
+        async function fetchTriggerData(triggerId)
+        {
+            if(processing)
+            {
+                alert("Please Wait for current operation to complete");
+                return;
+            }
+            setProcessing(true);
+            try 
+            {
+                setTriggerHistory([]);
+                let pickupResponse = await apiCalls.loadTriggerHistoryData(triggerId);
+                if(pickupResponse)
+                {
+                    // console.log(pickupResponse);
+                    if(pickupResponse.status === true)
+                    {
+                        console.log("Load Takeaway Menu API Called");
+                        try 
+                        {
+                            displayTakeawayData(pickupResponse.data);    
+                        } 
+                        catch (error) 
+                        {
+                            console.error(error);    
+                        }
+                    }
+                    else
+                    {
+                        if(pickupResponse.message)
+                        {
+                            alert(pickupResponse.message);
+                        }
+                    }
+                }
+                else
+                {
+                    alert("Unable To Load Data");
+                }
+            } 
+            catch (error) 
+            {
+                console.log(error);    
+            }
+            setProcessing(false);
+        }
+    //#endregion
     return(
         <div className="bodyContainer">
             <div className="toolbar__container">
@@ -328,10 +422,22 @@ export default function Body(props)
                 <div className="bodyToolbar">
                     <button className="toolbar__button" onClick={showMenuHandler}>Show Menu</button>
                     <button className="toolbar__button" onClick={loadTakeawayHandler}>Load Takeaway Menu</button>
-                    <button className="toolbar__button">Show Trigger History</button>
+                    <button className="toolbar__button" onClick={loadTriggerHistory}>Show Trigger History</button>
                     <button className="toolbar__button">Load Dine-In Menu</button>
                 </div>
             </div>
+
+            {
+                triggerHistory && triggerHistory.length>0 &&
+                <div className="toolbar__container">
+                <h2>Trigger History: </h2>
+                <div className="bodyToolbar">
+                    {triggerHistory.map((history)=>{
+                        return <button className='toolbar__button' onClick={()=>fetchTriggerData(history.id)}>{`${history.id} (${history.doc})`}</button>
+                    })}
+                </div>
+            </div>
+            }
 
             <div className="table__container">
                 {displayTable}

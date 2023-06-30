@@ -60,8 +60,6 @@ async function saveTakeawayMenu(id, requestData)
         items: requestData
     });
 
-    // console.log(JSON.stringify(data));
-
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
@@ -82,4 +80,60 @@ async function saveTakeawayMenu(id, requestData)
         return null;
     }
 }
-export default {loadStoreMenu,loadTakeawayMenu,saveTakeawayMenu};
+
+async function loadTriggerHistory(id)
+{
+    let data = JSON.stringify({
+        store: id
+    });
+
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://api.wcom.shop/api/petpooja/loadTriggerHistory',
+        headers: { 
+            'Content-Type': 'application/json'
+        },
+        data : data
+    };
+    try 
+    {
+        const response = await axios.request(config);
+        return response.data;
+    } 
+    catch (error) 
+    {
+        console.log(error);
+        return null;
+    }
+}
+
+async function loadTriggerHistoryData(id)
+{
+    let data = JSON.stringify({
+        triggerId: id
+    });
+
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://api.wcom.shop/api/petpooja/loadTriggerData',
+        headers: { 
+            'Content-Type': 'application/json'
+        },
+        data : data
+    };
+    try 
+    {
+        const response = await axios.request(config);
+        return response.data;
+    } 
+    catch (error) 
+    {
+        console.log(error);
+        return null;
+    }
+}
+
+
+export default {loadStoreMenu,loadTakeawayMenu,saveTakeawayMenu,loadTriggerHistory,loadTriggerHistoryData};
