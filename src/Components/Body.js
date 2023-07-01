@@ -470,13 +470,13 @@ export default function Body(props)
                         </button>
                         <button 
                             className='toolbar__button__big deletedItemRow'
-                            onClick={()=>{goToViolation("updatedItemsTable")}}
+                            onClick={()=>{goToViolation("deletedItemsTable")}}
                         >
                             Deleted Items ({deletedItems.length})
                         </button>
                         <button 
                             className='toolbar__button__big updatedItemRow'
-                            onClick={()=>{goToViolation("deletedItemsTable")}}
+                            onClick={()=>{goToViolation("updatedItemsTable")}}
                         >
                             Updated Items ({updatedItems.length})
                         </button>
