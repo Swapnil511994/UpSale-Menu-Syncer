@@ -167,6 +167,14 @@ table {
   border: 1px dashed;
   padding: 5px;
 }
+
+#summaryContainer
+{
+  position: sticky;
+  top: 0;
+  background: radial-gradient(#636669, #252627);
+  background-repeat: no-repeat;
+}
 /* End Of Item Styles */
 
 

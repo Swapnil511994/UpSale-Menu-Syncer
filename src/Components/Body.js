@@ -458,38 +458,37 @@ export default function Body(props)
                 {displayTable}
             </div>
 
-            <div className='table__container'>
-            <div>
-                <div>
-                    <h1>Summary:</h1>
-                    <div className="toolbar__container">
-                        <div className="bodyToolbar">
-                            <button 
-                                className='toolbar__button__big newItemRow'
-                                onClick={()=>{goToViolation("newItemsTable")}}
-                            >
-                                    New Items ({newItems.length})
-                            </button>
-                            <button 
-                                className='toolbar__button__big deletedItemRow'
-                                onClick={()=>{goToViolation("updatedItemsTable")}}
-                            >
-                                Deleted Items ({deletedItems.length})
-                            </button>
-                            <button 
-                                className='toolbar__button__big updatedItemRow'
-                                onClick={()=>{goToViolation("deletedItemsTable")}}
-                            >
-                                Updated Items ({updatedItems.length})
-                            </button>
-                            {
-                                (updatedItems.length>0 || newItems.length>0 || deletedItems.length>0) &&
-                                <button type='button' className='toolbar__button__big' onClick={saveUpdates}>Save Changes</button>
-                            }
-                        </div>
+            <div id='summaryContainer'>
+                <h1>Summary:</h1>
+                <div className="toolbar__container">
+                    <div className="bodyToolbar">
+                        <button 
+                            className='toolbar__button__big newItemRow'
+                            onClick={()=>{goToViolation("newItemsTable")}}
+                        >
+                                New Items ({newItems.length})
+                        </button>
+                        <button 
+                            className='toolbar__button__big deletedItemRow'
+                            onClick={()=>{goToViolation("updatedItemsTable")}}
+                        >
+                            Deleted Items ({deletedItems.length})
+                        </button>
+                        <button 
+                            className='toolbar__button__big updatedItemRow'
+                            onClick={()=>{goToViolation("deletedItemsTable")}}
+                        >
+                            Updated Items ({updatedItems.length})
+                        </button>
+                        {
+                            (updatedItems.length>0 || newItems.length>0 || deletedItems.length>0) &&
+                            <button type='button' className='toolbar__button__big' onClick={saveUpdates}>Save Changes</button>
+                        }
                     </div>
                 </div>
-
+            </div>
+            <div className='table__container'>
+            <div>
                 <h1>New Items</h1>
                 { newItems.length>0?
                     <DisplayNewItems items={newItems} 
