@@ -133,7 +133,7 @@ export default function DeletedItems(props)
         );
     });
 
-    let table = <table id="deletedItemsTable">
+    let table = <table>
         <thead>
             <tr>
                 <th>

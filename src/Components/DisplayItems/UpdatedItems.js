@@ -218,7 +218,7 @@ export default function UpdatedItems(props)
         );
     });
 
-    let table = <table id="updatedItemsTable">
+    let table = <table>
         <thead>
             <tr>
                 <th>Title</th>

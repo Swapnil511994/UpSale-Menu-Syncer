@@ -424,7 +424,7 @@ export default function Body(props)
     {
         const violation = document.getElementById(id); 
         window.scrollTo({
-          top:violation.offsetTop,
+          top:violation.offsetTop-50,
           behavior:"smooth"
       });
     };
@@ -459,7 +459,6 @@ export default function Body(props)
             </div>
 
             <div id='summaryContainer'>
-                <h1>Summary:</h1>
                 <div className="toolbar__container">
                     <div className="bodyToolbar">
                         <button 
@@ -489,7 +488,7 @@ export default function Body(props)
             </div>
             <div className='table__container'>
             <div>
-                <h1>New Items</h1>
+                <h1 id="newItemsTable">New Items</h1>
                 { newItems.length>0?
                     <DisplayNewItems items={newItems} 
                         checkAll={checkUncheckNewItems}
@@ -500,7 +499,7 @@ export default function Body(props)
                 <br />
                 <br />
 
-                <h1>Deleted Items</h1>
+                <h1 id="deletedItemsTable">Deleted Items</h1>
                 {
                     deletedItems.length>0?
                     <DisplayDeletedItems items={deletedItems} 
@@ -511,7 +510,7 @@ export default function Body(props)
 
                 <br />
                 <br />
-                <h1>Updated Items</h1>
+                <h1 id="updatedItemsTable">Updated Items</h1>
                 {
                     updatedItems.length>0?
                     <DisplayUpdatedItems 

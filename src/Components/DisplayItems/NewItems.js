@@ -133,7 +133,7 @@ export default function NewItems(props)
         );
     });
 
-    let table = <table id="newItemsTable">
+    let table = <table>
         <thead>
             <tr>
                 <th>
