@@ -355,6 +355,9 @@ export default function Body(props)
             try 
             {
                 setTriggerHistory([]);
+                setNewItems([]);
+                setDeletedItems([]);
+                setUpdatedItems([]);
                 let triggerData = await apiCalls.loadTriggerHistory(selectedStore.id);
                 if(triggerData.data && triggerData.data.length >0)
                 {
