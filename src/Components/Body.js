@@ -448,6 +448,21 @@ export default function Body(props)
 
             <div className='table__container'>
             <div>
+                <div>
+                    <h1>Summary:</h1>
+                    <div className="toolbar__container">
+                        <div className="bodyToolbar">
+                            <button className='toolbar__button__big newItemRow'>New Items ({newItems.length})</button>
+                            <button className='toolbar__button__big deletedItemRow'>Deleted Items ({deletedItems.length})</button>
+                            <button className='toolbar__button__big updatedItemRow'>Updated Items ({updatedItems.length})</button>
+                            {
+                                (updatedItems.length>0 || newItems.length>0 || deletedItems.length>0) &&
+                                <button type='button' className='toolbar__button__big' onClick={saveUpdates}>Save Changes</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+
                 <h1>New Items</h1>
                 { newItems.length>0?
                     <DisplayNewItems items={newItems} 
@@ -482,10 +497,7 @@ export default function Body(props)
                 <br />
                 <br />
 
-                {
-                    (updatedItems.length>0 || newItems.length>0 || deletedItems.length>0) &&
-                    <button type='button' className='toolbar__button__big' onClick={saveUpdates}>Save Changes</button>
-                }
+                
             </div>
             </div>
         </div>

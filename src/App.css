@@ -160,6 +160,13 @@ table {
 {
   background-color: #f5e505;
 }
+
+.summaryHeading
+{
+  margin: 5px;
+  border: 1px dashed;
+  padding: 5px;
+}
 /* End Of Item Styles */
 
 
