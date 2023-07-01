@@ -379,6 +379,7 @@ export default function Body(props)
                 return;
             }
             setProcessing(true);
+            setMode("pickup");
             try 
             {
                 setTriggerHistory([]);
