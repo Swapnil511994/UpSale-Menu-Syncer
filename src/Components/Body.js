@@ -423,8 +423,8 @@ export default function Body(props)
             <div className="toolbar__container">
                 <h2>Operations: </h2>
                 <div className="bodyToolbar">
-                    <button className="toolbar__button" onClick={showMenuHandler}>Show Menu</button>
-                    <button className="toolbar__button" onClick={loadTakeawayHandler}>Load Takeaway Menu</button>
+                    {/* <button className="toolbar__button" onClick={showMenuHandler}>Show Menu</button> */}
+                    {/* <button className="toolbar__button" onClick={loadTakeawayHandler}>Load Takeaway Menu</button> */}
                     <button className="toolbar__button" onClick={loadTriggerHistory}>Show Trigger History</button>
                     <button className="toolbar__button">Load Dine-In Menu</button>
                 </div>
