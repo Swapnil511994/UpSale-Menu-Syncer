@@ -418,6 +418,18 @@ export default function Body(props)
             setProcessing(false);
         }
     //#endregion
+    
+    //#region Other Functions
+    function goToViolation(id)
+    {
+        const violation = document.getElementById(id); 
+        window.scrollTo({
+          top:violation.offsetTop,
+          behavior:"smooth"
+      });
+    };
+    //#endregion
+    
     return(
         <div className="bodyContainer">
             <div className="toolbar__container">
@@ -452,9 +464,24 @@ export default function Body(props)
                     <h1>Summary:</h1>
                     <div className="toolbar__container">
                         <div className="bodyToolbar">
-                            <button className='toolbar__button__big newItemRow'>New Items ({newItems.length})</button>
-                            <button className='toolbar__button__big deletedItemRow'>Deleted Items ({deletedItems.length})</button>
-                            <button className='toolbar__button__big updatedItemRow'>Updated Items ({updatedItems.length})</button>
+                            <button 
+                                className='toolbar__button__big newItemRow'
+                                onClick={()=>{goToViolation("newItemsTable")}}
+                            >
+                                    New Items ({newItems.length})
+                            </button>
+                            <button 
+                                className='toolbar__button__big deletedItemRow'
+                                onClick={()=>{goToViolation("updatedItemsTable")}}
+                            >
+                                Deleted Items ({deletedItems.length})
+                            </button>
+                            <button 
+                                className='toolbar__button__big updatedItemRow'
+                                onClick={()=>{goToViolation("deletedItemsTable")}}
+                            >
+                                Updated Items ({updatedItems.length})
+                            </button>
                             {
                                 (updatedItems.length>0 || newItems.length>0 || deletedItems.length>0) &&
                                 <button type='button' className='toolbar__button__big' onClick={saveUpdates}>Save Changes</button>
