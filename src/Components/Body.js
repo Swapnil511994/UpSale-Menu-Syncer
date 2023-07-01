@@ -186,6 +186,56 @@ export default function Body(props)
         }
     //#endregion
     
+    //#region Load dineIn Data
+        async function loadDineData()
+        {
+            if(processing)
+            {
+                alert("Please Wait for current operation to complete");
+                return;
+            }
+            setProcessing(true);
+            setMode("pickup");
+            try 
+            {
+                setTriggerHistory([]);
+                let pickupResponse = await apiCalls.loadDineInData(selectedStore.id);
+                if(pickupResponse)
+                {
+                    // console.log(pickupResponse);
+                    if(pickupResponse.status === true)
+                    {
+                        console.log("Load Takeaway Menu API Called");
+                        try 
+                        {
+                            displayTakeawayData(pickupResponse.data);    
+                        } 
+                        catch (error) 
+                        {
+                            console.error(error);    
+                        }
+                    }
+                    else
+                    {
+                        if(pickupResponse.message)
+                        {
+                            alert(pickupResponse.message);
+                        }
+                    }
+                }
+                else
+                {
+                    alert("Unable To Load Data");
+                }
+            } 
+            catch (error) 
+            {
+                console.log(error);    
+            }
+            setProcessing(false);
+        }
+    //#endregion
+
     //#region Load Takeaway Menu
         function displayTakeawayData(datum)
         {
@@ -421,14 +471,14 @@ export default function Body(props)
     //#endregion
     
     //#region Other Functions
-    function goToViolation(id)
-    {
-        const violation = document.getElementById(id); 
-        window.scrollTo({
-          top:violation.offsetTop-50,
-          behavior:"smooth"
-      });
-    };
+        function goToViolation(id)
+        {
+            const violation = document.getElementById(id); 
+            window.scrollTo({
+            top:violation.offsetTop-50,
+            behavior:"smooth"
+        });
+        };
     //#endregion
     
     return(
@@ -439,7 +489,7 @@ export default function Body(props)
                     {/* <button className="toolbar__button" onClick={showMenuHandler}>Show Menu</button> */}
                     {/* <button className="toolbar__button" onClick={loadTakeawayHandler}>Load Takeaway Menu</button> */}
                     <button className="toolbar__button" onClick={loadTriggerHistory}>Show Trigger History</button>
-                    <button className="toolbar__button">Load Dine-In Menu</button>
+                    <button className="toolbar__button" onClick={loadDineData}>Load Dine-In Menu</button>
                 </div>
             </div>
 

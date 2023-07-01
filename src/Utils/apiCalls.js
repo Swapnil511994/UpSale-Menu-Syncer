@@ -135,5 +135,31 @@ async function loadTriggerHistoryData(id)
     }
 }
 
+async function loadDineInData(id)
+{
+    let data = JSON.stringify({
+        store: id
+    });
 
-export default {loadStoreMenu,loadTakeawayMenu,saveTakeawayMenu,loadTriggerHistory,loadTriggerHistoryData};
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://api.wcom.shop/api/petpooja/loadDineData',
+        headers: { 
+            'Content-Type': 'application/json'
+        },
+        data : data
+    };
+    try 
+    {
+        const response = await axios.request(config);
+        return response.data;
+    } 
+    catch (error) 
+    {
+        console.log(error);
+        return null;
+    }
+}
+
+export default {loadStoreMenu,loadTakeawayMenu,saveTakeawayMenu,loadTriggerHistory,loadTriggerHistoryData,loadDineInData};
