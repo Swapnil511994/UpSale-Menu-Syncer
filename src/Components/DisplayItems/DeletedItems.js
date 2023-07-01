@@ -27,7 +27,7 @@ export default function DeletedItems(props)
     let rows = items.map((item,index)=>
     {
         return (
-        <tr key={"deletedItemRow"+index}>
+        <tr className="deletedItemRow" key={"deletedItemRow"+index}>
             <td>
                 <input type='checkbox'
                     key={`deletedItemsCheckbox${index}`} 

@@ -146,6 +146,22 @@ table {
   height: 100%;
 }
 
+.newItemRow
+{
+  background-color: green;
+}
+
+.deletedItemRow
+{
+  background-color: #f50505;
+}
+
+.updatedItemRow
+{
+  background-color: #f5e505;
+}
 /* End Of Item Styles */
+
+
 
 

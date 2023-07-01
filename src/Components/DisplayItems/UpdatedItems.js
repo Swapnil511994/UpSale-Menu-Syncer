@@ -23,7 +23,7 @@ export default function UpdatedItems(props)
     let rows = items.map((item,index)=>
     {
         return (
-        <tr key={"updatedItemRow"+index}>
+        <tr className="updatedItemRow" key={"updatedItemRow"+index}>
             <td>{item.title}</td>
             <td>{item.updatedTitle}</td>
             <td>
