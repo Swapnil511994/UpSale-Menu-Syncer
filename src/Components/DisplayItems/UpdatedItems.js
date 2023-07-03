@@ -12,11 +12,12 @@ export default function UpdatedItems(props)
     
     let rows = items.map((item,index)=>
     {
-        // console.log(item.assoc);
+        // console.log(item);
+        // console.log(JSON.stringify(item.tax_data) === JSON.stringify(item.updatedTax));
         return (
         <tr className="updatedItemRow" key={"updatedItemRow"+index}>
             <td>{item.title}</td>
-            <td>{item.updatedTitle}</td>
+            <td className={(item.isTitleChanged === true)?"deletedItemRow":""}>{item.updatedTitle}</td>
             <td>
                 <input type="checkbox" 
                     checked={item.acceptTitleChange} 
@@ -59,7 +60,7 @@ export default function UpdatedItems(props)
                     </table>
                 }
             </td>
-            <td>
+            <td className={item.isTaxChanged === true? "deletedItemRow":""}>
                 {
                     item.updatedTax && item.updatedTax.length>0 && 
                     <table>
@@ -120,7 +121,7 @@ export default function UpdatedItems(props)
                     <table>
                         <thead>
                             <tr>
-                                <th>Parent Option Name</th>
+                                <th>Parent Name</th>
                                 <th>Option Type</th>
                             </tr>
                         </thead>
@@ -161,13 +162,13 @@ export default function UpdatedItems(props)
                     </table>
                 }
             </td>
-            <td>
+            <td className={item.isOptionsChanged === true? "deletedItemRow":""}>
                 {
                     item.updatedOptions.length>0 &&
                     <table>
                         <thead>
                             <tr>
-                                <th>Parent Option Name</th>
+                                <th>Parent Name</th>
                                 <th>Option Type</th>
                             </tr>
                         </thead>
@@ -222,19 +223,19 @@ export default function UpdatedItems(props)
         <thead>
             <tr>
                 <th>Title</th>
-                <th>Updated Title</th>
-                <th>Title Change</th>
+                <th>Pet Pooja Title (Updated)</th>
+                <th>Accept Title Change</th>
                 <th>Price</th>
-                <th>Updated Price</th>
-                <th>Price Change</th>
+                <th>Pet Pooja Price</th>
+                <th>Accept Price Change</th>
                 <th>Pos Id</th>
                 <th>Tax</th>
-                <th>Updated Tax</th>
-                <th>Tax Change</th>
+                <th>Pet Pooja Tax (Updated)</th>
+                <th>Accept Tax Change</th>
                 <th>Category</th>
-                <th>Options</th>
-                <th>Updated Options</th>
-                <th>Option Change</th>
+                <th>Existing Options</th>
+                <th>Pet Pooja Options (Updated)</th>
+                <th>Accept Option Change</th>
             </tr>
         </thead>
         <tbody>

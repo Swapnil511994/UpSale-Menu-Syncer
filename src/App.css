@@ -179,5 +179,30 @@ table {
 /* End Of Item Styles */
 
 
+/* loader */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.99);
+  z-index: 9999;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+}
+
+.overlay__hide
+{
+  display:none;
+}
+/* end of loader */
+
+
 
 
