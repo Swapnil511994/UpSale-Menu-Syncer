@@ -4,7 +4,7 @@ import React from 'react';
 import apiCalls from "../Utils/apiCalls";
 
 //components
-import Items from './DisplayItems/Items';
+// import Items from './DisplayItems/Items';
 import DisplayNewItems from './DisplayItems/NewItems';
 import DisplayDeletedItems from "./DisplayItems/DeletedItems";
 import DisplayUpdatedItems from "./DisplayItems/UpdatedItems";
@@ -69,7 +69,7 @@ export default function Body(props)
             setUpdatedItems((oldItems)=>
             {
                 return oldItems.map((item)=>{
-                    return (item.pos_item_id == pos_item_id) ? {...item, [property]:value}: item;
+                    return (item.pos_item_id === pos_item_id) ? {...item, [property]:value}: item;
                 });
             });
         }
@@ -267,7 +267,7 @@ export default function Body(props)
             if(!original && !updated) return false;
             else if((!updated && original) || (!original && updated)) return false;
 
-            if(original.length == updated.length)
+            if(original.length === updated.length)
             {
                 //options length is same, let's compare internal 
                 for(let i=0;i<original.length;i++)
@@ -279,9 +279,9 @@ export default function Body(props)
                             let originalOption = original[i].values[j];
                             let updatedOption = updated[i].values[j];
 
-                            if(originalOption.price != updatedOption.price || 
-                                originalOption.pos_option_value_id != updatedOption.pos_option_value_id ||
-                                originalOption.title != updatedOption.title
+                            if(originalOption.price !== updatedOption.price || 
+                                originalOption.pos_option_value_id !== updatedOption.pos_option_value_id ||
+                                originalOption.title !== updatedOption.title
                             )
                             {
                                 return false;
@@ -330,7 +330,7 @@ export default function Body(props)
                     prod.isDirty = true;
                     prod.acceptTitleChange = false;
                     prod.isTitleChanged = !(prod.title === prod.updatedTitle);
-                    prod.acceptPriceChange = (prod.price!=prod.updatedPrice)? true: false;
+                    prod.acceptPriceChange = (prod.price!==prod.updatedPrice)? true: false;
                     if(!prod.updatedTax) prod.updatedTax = [];
                     prod.acceptTaxChange = true;
                     prod.isTaxChanged = !compareTax(prod.tax_data,prod.updatedTax);
@@ -438,12 +438,20 @@ export default function Body(props)
                     {
                         setTriggerHistory([]);
                         let savePickupResponse = await apiCalls.saveTakeawayMenu(selectedStore.id, items);    
+                        if(savePickupResponse.status)
+                        {
+
+                        }
+                        else
+                        {
+                            alert("Unable To Save Data, Please Try Again Later");
+                        }
                         setDeletedItems([]);
                         setNewItems([]);
                         setUpdatedItems([]);
                     } 
                     catch (error) {
-                        
+                        alert("Unable To Save Data, Please try again Later");
                     }
                     
                 break;
@@ -645,7 +653,7 @@ export default function Body(props)
                 </div>
             </div>
 
-            <div className={processing==true?"overlay":"overlay__hidden"}>
+            <div className={processing===true?"overlay":"overlay__hidden"}>
                 <Dna
                     visible={true}
                     height="150"

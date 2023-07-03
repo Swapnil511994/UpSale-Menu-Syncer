@@ -1,5 +1,5 @@
 import React from "react";
-import Items from "./Items";
+// import Items from "./Items";
 
 export default function UpdatedItems(props)
 {
