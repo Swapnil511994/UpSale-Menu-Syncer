@@ -434,9 +434,9 @@ export default function Body(props)
             {
                 setTriggerHistory([]);
                 let pickupResponse = await apiCalls.loadTriggerHistoryData(triggerId);
+                // console.log(pickupResponse.data);
                 if(pickupResponse)
                 {
-                    // console.log(pickupResponse);
                     if(pickupResponse.status === true)
                     {
                         console.log("Load Takeaway Menu API Called");

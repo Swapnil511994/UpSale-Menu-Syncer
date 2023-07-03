@@ -1,19 +1,9 @@
 import React from "react";
+import Items from "./Items";
 
 export default function UpdatedItems(props)
 {
     let items = props.items;
-    // console.log(JSON.stringify(items));
-
-    //  for(let i=0;i<items.length;i++)
-    // {
-    //     console.log(`${items[i].title}:\n 
-    //             Title Change: ${items[i].acceptTitleChange} \n 
-    //             Tax Change: ${items[i].acceptTaxChange} \n 
-    //             Price Change: ${items[i].acceptPriceChange}
-    //             Options Change: ${items[i].acceptOptionChange} \n \n
-    //         `);
-    // }
 
     function updateValues(pos_item_id,property,value)
     {
@@ -22,6 +12,7 @@ export default function UpdatedItems(props)
     
     let rows = items.map((item,index)=>
     {
+        // console.log(item.assoc);
         return (
         <tr className="updatedItemRow" key={"updatedItemRow"+index}>
             <td>{item.title}</td>
@@ -46,19 +37,23 @@ export default function UpdatedItems(props)
                     item.tax_data.length>0 && 
                     <table>
                         <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Value</th>
-                                <th>Type</th>
-                            </tr>
                         </thead>
                         <tbody>
                             {item.tax_data.map((tax)=>{
-                                return <tr>
-                                    <td>{tax.title}</td>
-                                    <td>{tax.value}</td>
-                                    <td>{tax.type}</td>
-                                </tr>;
+                                return <>
+                                <tr>
+                                    <th>Title</th><td>{tax.title}</td>
+                                </tr>
+                                <tr>
+                                    <th>Value</th><td>{tax.value}</td>
+                                </tr>
+                                <tr>
+                                    <th>Type</th><td>{tax.type}</td>
+                                </tr>
+                                <tr>
+                                    <td colSpan={2}><br /></td>
+                                </tr>
+                                </>;
                             })}
                         </tbody>
                     </table>
@@ -69,19 +64,24 @@ export default function UpdatedItems(props)
                     item.updatedTax && item.updatedTax.length>0 && 
                     <table>
                         <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Value</th>
-                                <th>Type</th>
-                            </tr>
+                           
                         </thead>
                         <tbody>
                             {item.updatedTax.map((tax)=>{
-                                return <tr>
-                                    <td>{tax.title}</td>
-                                    <td>{tax.value}</td>
-                                    <td>{tax.type}</td>
-                                </tr>;
+                                return <>
+                                <tr>
+                                    <th>Title</th><td>{tax.title}</td>
+                                </tr>
+                                <tr>
+                                    <th>Value</th><td>{tax.value}</td>
+                                </tr>
+                                <tr>
+                                    <th>Type</th><td>{tax.type}</td>
+                                </tr>
+                                <tr>
+                                    <td colSpan={2}><br /></td>
+                                </tr>
+                                </>;
                             })}
                         </tbody>
                     </table>
@@ -95,7 +95,7 @@ export default function UpdatedItems(props)
             </td>
             <td>
                 {
-                    item.assoc.length>0 && item.assoc[0].categoryObj &&
+                    item.assoc && item.assoc.categoryObj &&
                     <table>
                         <thead>
                             <tr>
@@ -106,9 +106,9 @@ export default function UpdatedItems(props)
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{item.assoc[0].category}</td>
-                                <td>{item.assoc[0].categoryObj.title}</td>
-                                <td>{item.assoc[0].categoryObj.menuObj? item.assoc[0].categoryObj.menuObj.title: "Base Menu"}</td>
+                                <td>{item.assoc.category}</td>
+                                <td>{item.assoc.categoryObj.title}</td>
+                                <td>{item.assoc.categoryObj.menuObj? item.assoc.categoryObj.menuObj.title: "Base Menu"}</td>
                             </tr>
                         </tbody>
                     </table>
