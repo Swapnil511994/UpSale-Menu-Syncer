@@ -25,7 +25,7 @@ export default function UpdatedItems(props)
                 />
             </td>
             <td>{item.price}</td>
-            <td>{item.updatedPrice}</td>
+            <td className={(item.isPriceChanged === true)?"deletedItemRow":""}>{item.updatedPrice}</td>
             <td>
                 <input type="checkbox" 
                     checked={item.acceptPriceChange} 
@@ -130,8 +130,8 @@ export default function UpdatedItems(props)
                                 item.options.map((option)=>{
                                     return <>
                                     <tr>
-                                        <td>{option.title}</td>
-                                        <td>{option.type}</td>
+                                        <th>{option.title}</th>
+                                        <th>{(option.type==="multiple")?"Add-On":"Variation"}</th>
                                     </tr>
                                     {option.values && option.values.length>0 &&
                                         <tr>
@@ -177,8 +177,8 @@ export default function UpdatedItems(props)
                                 item.updatedOptions.map((option)=>{
                                     return <>
                                     <tr>
-                                        <td>{option.title}</td>
-                                        <td>{option.type}</td>
+                                        <th>{option.title}</th>
+                                        <th>{(option.type === "multiple")?"Add-On":"Variation"}</th>
                                     </tr>
                                     {option.values && option.values.length>0 &&
                                         <tr>

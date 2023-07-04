@@ -330,7 +330,8 @@ export default function Body(props)
                     prod.isDirty = true;
                     prod.acceptTitleChange = false;
                     prod.isTitleChanged = !(prod.title === prod.updatedTitle);
-                    prod.acceptPriceChange = (prod.price!==prod.updatedPrice)? true: false;
+                    prod.acceptPriceChange = (parseFloat(prod.price)!==parseFloat(prod.updatedPrice))? true: false;
+                    prod.isPriceChanged = prod.acceptPriceChange;
                     if(!prod.updatedTax) prod.updatedTax = [];
                     prod.acceptTaxChange = true;
                     prod.isTaxChanged = !compareTax(prod.tax_data,prod.updatedTax);
@@ -355,7 +356,10 @@ export default function Body(props)
                 }
                 else if(prod.isDirty === true)
                 {
-                    updatedItemsArr.push(prod);
+                    if(prod.isTitleChanged || prod.isPriceChanged || prod.isTaxChanged || prod.isOptionsChanged)
+                    {
+                        updatedItemsArr.push(prod);
+                    }
                 }
             }
 
