@@ -279,11 +279,15 @@ export default function Body(props)
                             let originalOption = original[i].values[j];
                             let updatedOption = updated[i].values[j];
 
-                            if(originalOption.price !== updatedOption.price || 
-                                originalOption.pos_option_value_id !== updatedOption.pos_option_value_id ||
-                                originalOption.title !== updatedOption.title
-                            )
+                            if(originalOption.pos_option_value_id !== updatedOption.pos_option_value_id || originalOption.title !== updatedOption.title)
                             {
+                                // console.log("here");
+                                return false;
+                            }
+
+                            if(parseFloat(originalOption.price) !== parseFloat(updatedOption.price))
+                            {
+                                // console.log("price here"+`${originalOption.price} ${updatedOption.price}`);
                                 return false;
                             }
                         }
@@ -337,6 +341,7 @@ export default function Body(props)
                     prod.isTaxChanged = !compareTax(prod.tax_data,prod.updatedTax);
                     prod.acceptOptionChange = true;
                     prod.isOptionsChanged = !compareOptions(prod.options,prod.updatedOptions);
+                    // console.log(prod.isOptionsChanged);
                 }
                 else prod.isDirty = false;
 
@@ -362,6 +367,8 @@ export default function Body(props)
                     }
                 }
             }
+
+            console.log(deletedItemsArr);
 
             setNewItems(newItemsArr);
             setUpdatedItems(updatedItemsArr);
