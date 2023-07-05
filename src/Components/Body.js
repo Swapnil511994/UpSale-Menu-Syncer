@@ -208,7 +208,7 @@ export default function Body(props)
                 let pickupResponse = await apiCalls.loadDineInData(selectedStore.id);
                 if(pickupResponse)
                 {
-                    // console.log(pickupResponse);
+                    console.log(pickupResponse);
                     // debugger;
                     if(pickupResponse.status === true)
                     {
@@ -324,7 +324,7 @@ export default function Body(props)
                     continue;
                 }
 
-                if(!prod.updatedPrice && prod.updatedPrice!=0 && prod.pos_item_id && prod.pos_item_id>0)
+                if(!prod.updatedPrice && prod.updatedPrice!==0 && prod.pos_item_id && prod.pos_item_id>0)
                 {
                     prod.toBeDeleted = true;
                 }
