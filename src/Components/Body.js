@@ -209,6 +209,7 @@ export default function Body(props)
                 if(pickupResponse)
                 {
                     // console.log(pickupResponse);
+                    // debugger;
                     if(pickupResponse.status === true)
                     {
                         console.log("Load Takeaway Menu API Called");
@@ -323,7 +324,7 @@ export default function Body(props)
                     continue;
                 }
 
-                if(!prod.updatedPrice && prod.pos_item_id && prod.pos_item_id>0)
+                if(!prod.updatedPrice && prod.updatedPrice!=0 && prod.pos_item_id && prod.pos_item_id>0)
                 {
                     prod.toBeDeleted = true;
                 }
@@ -368,7 +369,7 @@ export default function Body(props)
                 }
             }
 
-            console.log(deletedItemsArr);
+            // console.log(deletedItemsArr);
 
             setNewItems(newItemsArr);
             setUpdatedItems(updatedItemsArr);
