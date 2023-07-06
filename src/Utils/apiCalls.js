@@ -63,7 +63,7 @@ async function saveTakeawayMenu(id, requestData)
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'https://api.wcom.shop/api/petpooja/savePickupMenu',
+        url: 'https://api.wcom.shop/api/saveData',
         headers: { 
             'Content-Type': 'application/json'
         },
