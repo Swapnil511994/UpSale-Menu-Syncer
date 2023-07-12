@@ -4,22 +4,20 @@ import React from 'react';
 import apiCalls from "../Utils/apiCalls";
 
 //components
-// import Items from './DisplayItems/Items';
 import DisplayNewItems from './DisplayItems/NewItems';
 import DisplayDeletedItems from "./DisplayItems/DeletedItems";
 import DisplayUpdatedItems from "./DisplayItems/UpdatedItems";
 
-//loader
-import {Dna} from "react-loader-spinner";
-
 export default function Body(props)
 {
     const selectedStore = props.selectedStore;
-
+    const processing = props.processingFlag;
     const [newItems, setNewItems] = React.useState([]);
     const [updatedItems, setUpdatedItems] = React.useState([]);
     const [deletedItems, setDeletedItems] = React.useState([]);
     const [triggerHistory, setTriggerHistory] = React.useState([]);
+    
+    const [mode, setMode] = React.useState("");
 
     //#region State Manipulation
         function checkUncheckNewItems(value)
@@ -74,357 +72,302 @@ export default function Body(props)
             });
         }
     //#endregion
-
-    // const [displayTable, setDisplayTable] = React.useState();
-    const [processing, setProcessing] = React.useState(false);
-    const [mode, setMode] = React.useState("");
-
-    //#region Show Menu
-        // function displayProducts(data)
-        // {
-        //     // console.log(data);
-        //     let categories = data.categories;
-        //     let subcategories = data.subcategories;
-        //     let products = data.products;
-        //     let menus = data.menutypes;
-        //     let associations = data.associations;
-        //     let options = data.options;
-        //     let optionvalues = data.options_values;
-
-        //     //products to process
-        //     let prods = [];
-        //     for (let i = 0; i < products.length; i++) 
-        //     {
-        //         let prod_item = {};
-        //         const product = products[i];
-        //         prod_item = {...product};
-
-        //         //associations, subcategories and categories
-        //         prod_item.assoc = associations.filter((assoc)=>{
-        //             return assoc.item === product.id;
-        //         });
-        //         if(prod_item.assoc.length>0)
-        //         {
-        //             for (let j = 0; j < prod_item.assoc.length; j++) {
-        //                 let assoc = prod_item.assoc[j];
-        //                 if(assoc.subcategory)
-        //                 {
-        //                     for(let k=0;k<subcategories.length;k++)
-        //                     {
-        //                         if(subcategories[k].id===assoc.subcategory)
-        //                         {
-        //                             assoc.subcategoryObj = subcategories[k];
-        //                             break;
-        //                         }
-        //                     }
-        //                 }
-        //                 if(assoc.category)
-        //                 {
-        //                     for(let k=0;k<categories.length;k++)
-        //                     {
-        //                         if(categories[k].id===assoc.category)
-        //                         {
-        //                             assoc.categoryObj = categories[k];
-        //                             if(assoc.categoryObj.menu_id && assoc.categoryObj.menu_id>0)
-        //                             {
-        //                                 for(let l=0;l<menus.length;l++)
-        //                                 {
-        //                                     if(menus[l].id === assoc.categoryObj.menu_id)
-        //                                     {
-        //                                         assoc.categoryObj.menuObj = menus[l];
-        //                                         break;
-        //                                     }
-        //                                 }
-        //                             }
-        //                             break;
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-
-        //         //options and options_values
-        //         prod_item.options = options.filter((option)=>{
-        //             return option.item === product.id;
-        //         });
-        //         if(prod_item.options && prod_item.options.length>0)
-        //         {
-        //             //optionvalues
-        //             for(let j=0;j<prod_item.options.length;j++)
-        //             {
-        //                 let option = prod_item.options[j];
-        //                 option.values = optionvalues.filter((optionvalue)=>{
-        //                     return option.id === optionvalue.option_id;
-        //                 });
-        //             }
-        //         }
-
-        //         prods.push(prod_item);
-        //     }
-        //     let displayStr = null;
-        //     displayStr = <Items items={prods} />;
-        //     setDisplayTable(displayStr);
-            
-        // }
-
-        // async function showMenuHandler()
-        // {
-        //     if(processing)
-        //     {
-        //         alert("Please Wait for current operation to complete");
-        //         return;
-        //     }
-            
-        //     setMode("");
-        //     setProcessing(true);
-        //     setTriggerHistory([]);
-        //     let data = await apiCalls.loadStoreMenu(selectedStore.id);
-        //     if(data)
-        //     {
-        //         console.log("Fetch Menu API Called");
-        //         displayProducts(data); 
-        //     }
-        //     else
-        //     {
-        //         alert("Unable To Load Data");
-        //     }
-        //     setProcessing(false);
-        // }
-    //#endregion
     
-    //#region Load dineIn Data
-        async function loadDineData()
-        {
-            if(processing)
+    //#region Pet Pooja
+        //#region Load dineIn Data
+            async function loadDineData()
             {
-                alert("Please Wait for current operation to complete");
-                return;
-            }
-            setProcessing(true);
-            setMode("pickup");
-            try 
-            {
-                setTriggerHistory([]);
-                let pickupResponse = await apiCalls.loadDineInData(selectedStore.id);
-                if(pickupResponse)
+                if(processing)
                 {
-                    console.log(pickupResponse);
-                    // debugger;
-                    if(pickupResponse.status === true)
+                    alert("Please Wait for current operation to complete");
+                    return;
+                }
+                updateProcessing(true);
+                setMode("pickup");
+                try 
+                {
+                    setTriggerHistory([]);
+                    let pickupResponse = await apiCalls.loadDineInData(selectedStore.id);
+                    if(pickupResponse)
                     {
-                        console.log("Load Takeaway Menu API Called");
-                        try 
+                        console.log(pickupResponse);
+                        // debugger;
+                        if(pickupResponse.status === true)
                         {
-                            displayTakeawayData(pickupResponse.data);    
-                        } 
-                        catch (error) 
+                            console.log("Load Takeaway Menu API Called");
+                            try 
+                            {
+                                displayTakeawayData(pickupResponse.data);    
+                            } 
+                            catch (error) 
+                            {
+                                console.error(error);    
+                            }
+                        }
+                        else
                         {
-                            console.error(error);    
+                            if(pickupResponse.message)
+                            {
+                                alert(pickupResponse.message);
+                            }
                         }
                     }
                     else
                     {
-                        if(pickupResponse.message)
+                        alert("Unable To Load Data");
+                    }
+                } 
+                catch (error) 
+                {
+                    console.log(error);    
+                }
+                updateProcessing(false);
+            }
+        //#endregion
+
+        //#region Load Takeaway Menu
+
+            function compareTax(original, updated)
+            {
+                //if tax are same true will be returned
+                //else false will be returned
+                //by default false will be returned
+                try 
+                {
+                    return (JSON.stringify(original) === JSON.stringify(updated));
+                } 
+                catch (error) 
+                {
+                    return false;    
+                }
+            }
+
+            function compareOptions(original, updated)
+            {
+                //if options are same false will be returned
+                //else true will be returned
+                //by default false will be returned
+                if(!original && !updated) return false;
+                else if((!updated && original) || (!original && updated)) return false;
+
+                if(original.length === updated.length)
+                {
+                    //options length is same, let's compare internal 
+                    for(let i=0;i<original.length;i++)
+                    {
+                        if(original[i].values && updated[i].values && original[i].values.length === updated[i].values.length)
                         {
-                            alert(pickupResponse.message);
+                            for(let j=0;j<original[i].values.length;j++)
+                            {
+                                let originalOption = original[i].values[j];
+                                let updatedOption = updated[i].values[j];
+
+                                if(originalOption.pos_option_value_id !== updatedOption.pos_option_value_id || originalOption.title !== updatedOption.title)
+                                {
+                                    // console.log("here");
+                                    return false;
+                                }
+
+                                if(parseFloat(originalOption.price) !== parseFloat(updatedOption.price))
+                                {
+                                    // console.log("price here"+`${originalOption.price} ${updatedOption.price}`);
+                                    return false;
+                                }
+                            }
                         }
+                        else return false;
                     }
                 }
                 else
                 {
-                    alert("Unable To Load Data");
+                    return false;
                 }
-            } 
-            catch (error) 
-            {
-                console.log(error);    
+
+                return true;
             }
-            setProcessing(false);
-        }
-    //#endregion
 
-    //#region Load Takeaway Menu
-
-        function compareTax(original, updated)
-        {
-            //if tax are same true will be returned
-            //else false will be returned
-            //by default false will be returned
-            try 
+            function displayTakeawayData(datum)
             {
-                return (JSON.stringify(original) === JSON.stringify(updated));
-            } 
-            catch (error) 
-            {
-                return false;    
-            }
-        }
-
-        function compareOptions(original, updated)
-        {
-            //if options are same false will be returned
-            //else true will be returned
-            //by default false will be returned
-            if(!original && !updated) return false;
-            else if((!updated && original) || (!original && updated)) return false;
-
-            if(original.length === updated.length)
-            {
-                //options length is same, let's compare internal 
-                for(let i=0;i<original.length;i++)
+                // datum = null;
+                if(!datum)
                 {
-                    if(original[i].values && updated[i].values && original[i].values.length === updated[i].values.length)
+                    return;
+                }
+
+                let newItemsArr = [];
+                let updatedItemsArr = [];
+                let deletedItemsArr = [];
+
+                for (let i = 0; i < datum.length; i++) 
+                {
+                    let prod = datum[i];
+                    if(!prod.pos_item_id)
                     {
-                        for(let j=0;j<original[i].values.length;j++)
+                        continue;
+                    }
+
+                    if(!prod.updatedPrice && prod.updatedPrice!==0 && prod.pos_item_id && prod.pos_item_id>0)
+                    {
+                        prod.toBeDeleted = true;
+                    }
+                    else prod.toBeDeleted = false;
+
+                    if(prod.price!==prod.updatedPrice || JSON.stringify(prod.tax_data) !== JSON.stringify(prod.updatedTax))
+                    {
+                        prod.isDirty = true;
+                        prod.acceptTitleChange = false;
+                        prod.isTitleChanged = !(prod.title === prod.updatedTitle);
+                        prod.acceptPriceChange = (parseFloat(prod.price)!==parseFloat(prod.updatedPrice))? true: false;
+                        prod.isPriceChanged = prod.acceptPriceChange;
+                        if(!prod.updatedTax) prod.updatedTax = [];
+                        prod.acceptTaxChange = true;
+                        prod.isTaxChanged = !compareTax(prod.tax_data,prod.updatedTax);
+                        prod.acceptOptionChange = true;
+                        prod.isOptionsChanged = !compareOptions(prod.options,prod.updatedOptions);
+                        // console.log(prod.isOptionsChanged);
+                    }
+                    else prod.isDirty = false;
+
+                    if(!prod.id)
+                    {
+                        prod.isNewItem = true;
+                    }
+                    else prod.isNewItem = false;
+                    
+                    if(prod.isNewItem === true)
+                    {
+                        newItemsArr.push(prod);
+                    }
+                    else if(prod.toBeDeleted === true)
+                    {
+                        deletedItemsArr.push(prod);
+                    }
+                    else if(prod.isDirty === true)
+                    {
+                        if(prod.isTitleChanged || prod.isPriceChanged || prod.isTaxChanged || prod.isOptionsChanged)
                         {
-                            let originalOption = original[i].values[j];
-                            let updatedOption = updated[i].values[j];
+                            updatedItemsArr.push(prod);
+                        }
+                    }
+                }
 
-                            if(originalOption.pos_option_value_id !== updatedOption.pos_option_value_id || originalOption.title !== updatedOption.title)
+                // console.log(deletedItemsArr);
+
+                setNewItems(newItemsArr);
+                setUpdatedItems(updatedItemsArr);
+                setDeletedItems(deletedItemsArr);
+            }
+        //#endregion
+
+        //#region Load Trigger History
+            async function loadTriggerHistory()
+            {
+                if(processing)
+                {
+                    alert("Please Wait for current operation to complete");
+                    return;
+                }
+                updateProcessing(true);
+                try 
+                {
+                    setTriggerHistory([]);
+                    setNewItems([]);
+                    setDeletedItems([]);
+                    setUpdatedItems([]);
+                    let triggerData = await apiCalls.loadTriggerHistory(selectedStore.id);
+                    if(triggerData.data && triggerData.data.length >0)
+                    {
+                        setTriggerHistory(triggerData.data);
+                    }
+                } 
+                catch (error) 
+                {
+                    console.log(error);    
+                }
+                updateProcessing(false);
+            }
+
+            async function fetchTriggerData(triggerId)
+            {
+                if(processing)
+                {
+                    alert("Please Wait for current operation to complete");
+                    return;
+                }
+                updateProcessing(true);
+                setMode("pickup");
+                try 
+                {
+                    setTriggerHistory([]);
+                    let pickupResponse = await apiCalls.loadTriggerHistoryData(triggerId);
+                    // console.log(pickupResponse.data);
+                    if(pickupResponse)
+                    {
+                        if(pickupResponse.status === true)
+                        {
+                            console.log("Load Takeaway Menu API Called");
+                            try 
                             {
-                                // console.log("here");
-                                return false;
+                                displayTakeawayData(pickupResponse.data);    
+                            } 
+                            catch (error) 
+                            {
+                                console.error(error);    
                             }
-
-                            if(parseFloat(originalOption.price) !== parseFloat(updatedOption.price))
+                        }
+                        else
+                        {
+                            if(pickupResponse.message)
                             {
-                                // console.log("price here"+`${originalOption.price} ${updatedOption.price}`);
-                                return false;
+                                alert(pickupResponse.message);
                             }
                         }
                     }
-                    else return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        function displayTakeawayData(datum)
-        {
-            // datum = null;
-            if(!datum)
-            {
-                return;
-            }
-
-            let newItemsArr = [];
-            let updatedItemsArr = [];
-            let deletedItemsArr = [];
-
-            for (let i = 0; i < datum.length; i++) 
-            {
-                let prod = datum[i];
-                if(!prod.pos_item_id)
-                {
-                    continue;
-                }
-
-                if(!prod.updatedPrice && prod.updatedPrice!==0 && prod.pos_item_id && prod.pos_item_id>0)
-                {
-                    prod.toBeDeleted = true;
-                }
-                else prod.toBeDeleted = false;
-
-                if(prod.price!==prod.updatedPrice || JSON.stringify(prod.tax_data) !== JSON.stringify(prod.updatedTax))
-                {
-                    prod.isDirty = true;
-                    prod.acceptTitleChange = false;
-                    prod.isTitleChanged = !(prod.title === prod.updatedTitle);
-                    prod.acceptPriceChange = (parseFloat(prod.price)!==parseFloat(prod.updatedPrice))? true: false;
-                    prod.isPriceChanged = prod.acceptPriceChange;
-                    if(!prod.updatedTax) prod.updatedTax = [];
-                    prod.acceptTaxChange = true;
-                    prod.isTaxChanged = !compareTax(prod.tax_data,prod.updatedTax);
-                    prod.acceptOptionChange = true;
-                    prod.isOptionsChanged = !compareOptions(prod.options,prod.updatedOptions);
-                    // console.log(prod.isOptionsChanged);
-                }
-                else prod.isDirty = false;
-
-                if(!prod.id)
-                {
-                    prod.isNewItem = true;
-                }
-                else prod.isNewItem = false;
-                
-                if(prod.isNewItem === true)
-                {
-                    newItemsArr.push(prod);
-                }
-                else if(prod.toBeDeleted === true)
-                {
-                    deletedItemsArr.push(prod);
-                }
-                else if(prod.isDirty === true)
-                {
-                    if(prod.isTitleChanged || prod.isPriceChanged || prod.isTaxChanged || prod.isOptionsChanged)
+                    else
                     {
-                        updatedItemsArr.push(prod);
+                        alert("Unable To Load Data");
                     }
+                } 
+                catch (error) 
+                {
+                    console.log(error);    
                 }
+                updateProcessing(false);
             }
-
-            // console.log(deletedItemsArr);
-
-            setNewItems(newItemsArr);
-            setUpdatedItems(updatedItemsArr);
-            setDeletedItems(deletedItemsArr);
-        }
-
-        // async function loadTakeawayHandler()
-        // {
-        //     if(processing)
-        //     {
-        //         alert("Please Wait for current operation to complete");
-        //         return;
-        //     }
-        //     setMode("pickup");
-        //     setProcessing(true);
-        //     try {
-        //         setTriggerHistory([]);
-        //         let pickupResponse = await apiCalls.loadTakeawayMenu(selectedStore.id);
-        //         if(pickupResponse)
-        //         {
-        //             // console.log(pickupResponse);
-        //             if(pickupResponse.status === true)
-        //             {
-        //                 console.log("Load Takeaway Menu API Called");
-        //                 try 
-        //                 {
-        //                     displayTakeawayData(pickupResponse.data);    
-        //                 } 
-        //                 catch (error) 
-        //                 {
-        //                     console.error(error);    
-        //                 }
-        //             }
-        //             else
-        //             {
-        //                 if(pickupResponse.message)
-        //                 {
-        //                     alert(pickupResponse.message);
-        //                 }
-        //             }
-        //         }
-        //         else
-        //         {
-        //             alert("Unable To Load Data");
-        //         }
-        //     } 
-        //     catch (error) 
-        //     {
-        //         console.log(error);    
-        //     }
-            
-        //     setProcessing(false);
-        // }
+        //#endregion
     //#endregion
 
+    //#region TmBill
+            //#region Load Dine-In Data
+                async function loadTMBillDineInMenu()
+                {
+                    if(processing)
+                    {
+                        alert("Please Wait for current operation to complete");
+                        return;
+                    }
+                    updateProcessing(true);
+                    setMode("dine_in");
+
+                    updateProcessing(false);
+                }
+            //#endregion
+
+            //#region Load Takeaway Data
+                async function loadTMBillPickupMenu()
+                {
+                    if(processing)
+                    {
+                        alert("Please Wait for current operation to complete");
+                        return;
+                    }
+                    updateProcessing(true);
+                    setMode("pickup");
+
+                    updateProcessing(false);
+                }
+            //#endregion
+    //#endregion
     //#region Save Menu
         async function saveUpdates()
         {
@@ -442,156 +385,91 @@ export default function Body(props)
             items.deletedItems = deletedItems;
 
             console.log(mode);
-            // console.log(items);
-            setProcessing(true);
-            switch (mode) {
-                case "pickup":
-                    try 
-                    {
-                        setTriggerHistory([]);
-                        let savePickupResponse = await apiCalls.saveTakeawayMenu(selectedStore.id, items);    
-                        if(savePickupResponse.status)
-                        {
-
-                        }
-                        else
-                        {
-                            alert("Unable To Save Data, Please Try Again Later");
-                        }
-                        setDeletedItems([]);
-                        setNewItems([]);
-                        setUpdatedItems([]);
-                    } 
-                    catch (error) {
-                        alert("Unable To Save Data, Please try again Later");
-                    }
-                    
-                break;
             
-                default:
-                    //do nothing
-                break;
-            }
-            setProcessing(false);
-        }
-    //#endregion
-
-    //#region Load Trigger History
-        async function loadTriggerHistory()
-        {
-            if(processing)
-            {
-                alert("Please Wait for current operation to complete");
-                return;
-            }
-            setProcessing(true);
+            updateProcessing(true);
             try 
             {
                 setTriggerHistory([]);
-                setNewItems([]);
-                setDeletedItems([]);
-                setUpdatedItems([]);
-                let triggerData = await apiCalls.loadTriggerHistory(selectedStore.id);
-                if(triggerData.data && triggerData.data.length >0)
+                let savePickupResponse = await apiCalls.saveTakeawayMenu(selectedStore.id, items);    
+                if(savePickupResponse.status)
                 {
-                    setTriggerHistory(triggerData.data);
-                }
-            } 
-            catch (error) 
-            {
-                console.log(error);    
-            }
-            setProcessing(false);
-        }
 
-        async function fetchTriggerData(triggerId)
-        {
-            if(processing)
-            {
-                alert("Please Wait for current operation to complete");
-                return;
-            }
-            setProcessing(true);
-            setMode("pickup");
-            try 
-            {
-                setTriggerHistory([]);
-                let pickupResponse = await apiCalls.loadTriggerHistoryData(triggerId);
-                // console.log(pickupResponse.data);
-                if(pickupResponse)
-                {
-                    if(pickupResponse.status === true)
-                    {
-                        console.log("Load Takeaway Menu API Called");
-                        try 
-                        {
-                            displayTakeawayData(pickupResponse.data);    
-                        } 
-                        catch (error) 
-                        {
-                            console.error(error);    
-                        }
-                    }
-                    else
-                    {
-                        if(pickupResponse.message)
-                        {
-                            alert(pickupResponse.message);
-                        }
-                    }
                 }
                 else
                 {
-                    alert("Unable To Load Data");
+                    alert("Unable To Save Data, Please Try Again Later");
                 }
+                setDeletedItems([]);
+                setNewItems([]);
+                setUpdatedItems([]);
             } 
             catch (error) 
             {
-                console.log(error);    
+                alert("Unable To Save Data, Please try again Later");
             }
-            setProcessing(false);
+            finally
+            {
+
+            }
+            updateProcessing(false);
         }
     //#endregion
+
+    
     
     //#region Other Functions
         function goToViolation(id)
         {
             const violation = document.getElementById(id); 
             window.scrollTo({
-            top:violation.offsetTop-50,
-            behavior:"smooth"
-        });
+                top:violation.offsetTop-50,
+                behavior:"smooth"
+            });
         };
+
+        function updateProcessing(val)
+        {
+            props.handleProcessingChange(val);
+        }
     //#endregion
     
+
     return(
         <>
             <div className="bodyContainer">
                 <div className="toolbar__container">
                     <h2>Operations: </h2>
-                    <div className="bodyToolbar">
-                        {/* <button className="toolbar__button" onClick={showMenuHandler}>Show Menu</button> */}
-                        {/* <button className="toolbar__button" onClick={loadTakeawayHandler}>Load Takeaway Menu</button> */}
-                        <button className="toolbar__button" onClick={loadTriggerHistory}>Show Trigger History</button>
-                        <button className="toolbar__button" onClick={loadDineData}>Load Dine-In Menu</button>
-                    </div>
+                    {
+                        (props.integrationData.type === "pet_pooja" || props.integrationData.type === "pet_pooja_dinein") &&
+                        <div className="bodyToolbar">
+                            <button className="toolbar__button" onClick={loadTriggerHistory}>Show Trigger History</button>
+                            <button className="toolbar__button" onClick={loadDineData}>Load Dine-In Menu</button>
+                        </div>
+                    }
+
+                    {
+                        props.integrationData.type === "tmbill" &&
+                        <div className="bodyToolbar">
+                            <button className="toolbar__button" onClick={loadTMBillPickupMenu}>Load Menu</button>
+                            <button className="toolbar__button" onClick={loadTMBillDineInMenu}>Load Dine-In Menu</button>
+                        </div>
+                    }
+                    
                 </div>
 
                 {
                     triggerHistory && triggerHistory.length>0 &&
                     <div className="toolbar__container">
-                    <h2>Trigger History: </h2>
-                    <div className="bodyToolbar">
-                        {triggerHistory.map((history)=>{
-                            return <button className='toolbar__button' onClick={()=>fetchTriggerData(history.id)}>{`${history.id} (${history.doc})`}</button>
-                        })}
+                        <h2>Trigger History: </h2>
+                        <div className="bodyToolbar">
+                            {
+                                triggerHistory.map((history)=>{
+                                    return <button className='toolbar__button' onClick={()=>fetchTriggerData(history.id)}>{`${history.id} (${history.doc})`}</button>
+                                })
+                            }
+                        </div>
                     </div>
-                </div>
                 }
-
-                {/* <div className="table__container">
-                    {displayTable}
-                </div> */}
 
                 <div id='summaryContainer'>
                     <div className="toolbar__container">
@@ -622,9 +500,6 @@ export default function Body(props)
                     </div>
                 </div>
                 <div className='table__container'>
-                    <div>
-
-                    </div>
                     <div>
                         <h1 id="newItemsTable">New Items</h1>
                         { newItems.length>0?
@@ -663,17 +538,6 @@ export default function Body(props)
                         
                     </div>
                 </div>
-            </div>
-
-            <div className={processing===true?"overlay":"overlay__hidden"}>
-                <Dna
-                    visible={true}
-                    height="150"
-                    width="150"
-                    ariaLabel="dna-loading"
-                    wrapperStyle={{}}
-                    wrapperClass="dna-wrapper"
-                />
             </div>
         </>
     );
