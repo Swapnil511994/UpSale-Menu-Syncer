@@ -217,6 +217,62 @@ import axios from "axios";
 
 //#endregion
 
+//#region TMBill API Calls
+    async function tmbill_loadTakeawayMenu(id)
+    {
+        let data = JSON.stringify({
+            store: id
+        });
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://api.wcom.shop/api/tmbill/loadPickupMenu',
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+            data : data
+        };
+        try 
+        {
+            const response = await axios.request(config);
+            return response.data;
+        } 
+        catch (error) 
+        {
+            console.log(error);
+            return null;
+        }
+    }
+
+    async function tmbill_loadDineInMenu(id)
+    {
+        let data = JSON.stringify({
+            store: id
+        });
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://api.wcom.shop/api/tmbill/loadDineInMenu',
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+            data : data
+        };
+        try 
+        {
+            const response = await axios.request(config);
+            return response.data;
+        } 
+        catch (error) 
+        {
+            console.log(error);
+            return null;
+        }
+    }
+//#endregion
+
 export default {
                     loadStores,
                     loadStoreIntegration,
@@ -225,5 +281,7 @@ export default {
                     saveTakeawayMenu,
                     loadTriggerHistory,
                     loadTriggerHistoryData,
-                    loadDineInData
+                    loadDineInData,
+                    tmbill_loadTakeawayMenu,
+                    tmbill_loadDineInMenu
                 };

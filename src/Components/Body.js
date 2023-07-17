@@ -348,7 +348,26 @@ export default function Body(props)
                     }
                     updateProcessing(true);
                     setMode("dine_in");
-
+                    let tmbillResponse = await apiCalls.tmbill_loadDineInMenu(selectedStore.id);
+                    // console.log(tmbillResponse);
+                    if(tmbillResponse)
+                    {
+                        if(tmbillResponse.status && tmbillResponse.status == true)
+                        {
+                            //do something here
+                            displayTakeawayData(tmbillResponse.data);
+                        }
+                        else
+                        {
+                            if(tmbillResponse.message) alert(tmbillResponse.message);
+                            else alert("Unknow Error, Check Network tab for details");
+                        }
+                    }
+                    else
+                    {
+                        alert("Unable To Load Response from API")
+                        console.error("Error Calling TMBill API");
+                    }
                     updateProcessing(false);
                 }
             //#endregion
@@ -363,7 +382,27 @@ export default function Body(props)
                     }
                     updateProcessing(true);
                     setMode("pickup");
-
+                    let tmbillResponse = await apiCalls.tmbill_loadTakeawayMenu(selectedStore.id);
+                    // console.log(tmbillResponse);
+                    if(tmbillResponse)
+                    {
+                        if(tmbillResponse.status && tmbillResponse.status == true)
+                        {
+                            //do something here
+                            displayTakeawayData(tmbillResponse.data);
+                        }
+                        else
+                        {
+                            if(tmbillResponse.message) alert(tmbillResponse.message);
+                            else alert("Unknow Error, Check Network tab for details");
+                        }
+                    }
+                    else
+                    {
+                        alert("Unable To Load Response from API")
+                        console.error("Error Calling TMBill API");
+                    }
+                    
                     updateProcessing(false);
                 }
             //#endregion
